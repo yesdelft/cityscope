@@ -408,7 +408,8 @@ class Cityscopy:
             if (scan_results != old_scan_results) and from_last_sent > SEND_INTERVAL:
                 try:
                     if self.table_settings['cityio'] is True:
-                        
+                        with open("scanner_data.txt", "w") as o:
+                            json.dump(scan_results, o)
                         print(json.dumps(scan_results))
                         self.send_json_to_cityIO(json.dumps(scan_results))
                     else:
