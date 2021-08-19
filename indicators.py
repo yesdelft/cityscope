@@ -1,6 +1,7 @@
 from brix import Indicator
 from statistics import mean
 import random
+import pandas as pd
 class MyIndicator(Indicator):
         '''
         Write a description for your indicator here.
@@ -63,26 +64,61 @@ class Noise(Indicator):
                 self.requires_geometry = True
                 self.name = "hot"
         def load_module(self):
-                pass
+                self.parks = []
+
 
         def return_indicator(self, geogrid_data):
                 features = []
                 
-                print(geogrid_data) 
+                # print(geogrid_data) 
+                offices = 0
+                office_points = []
                 for i, cell in enumerate(geogrid_data):
-                        if i>0:
-                                continue
+                        name = cell["name"]
+                        if name == "Office":
+                                offices+=1
+                                lat,lon = zip(*cell['geometry']['coordinates'][0])
+                                lat,lon = mean(lat),mean(lon)
+                                office_points.append((lat, lon))
+                d = pd.read_csv("Parks_cityscope.csv")
+                # for index, row in d.iterrows():
+                # print(row['x'], row['y'])
+                parks = list(zip(d["x"].values.tolist(), d["y"].values.tolist()))
+                # for i, cell in enumerate(geogrid_data):
 
-                        feature = {}
-                        lat,lon = zip(*cell['geometry']['coordinates'][0])
-                        
-                        print(lat)
-                        lat,lon = mean(lat),mean(lon)
-                        lat += 0.001
-                        feature['geometry'] = {'coordinates': [lat,lon],'type': 'Point'}
-                        # feature['properties'] = {self.name:random()}
-                        # feature['properties'] = {self.name: random.randint(0, 20)}
-                        feature['properties'] = {self.name: 4, "whatever": 6}
+                #         name = cell["name"]
+                #         # print(cell)
+                #         # if name != "Institutional":
+                #                 # continue
+                #         # if i % 2 == 0: 
+                #         #         continue
+                #         feature = {}
+                #         lat,lon = zip(*cell['geometry']['coordinates'][0])
+                #         z = zip(*cell['geometry']['coordinates'][0])
+                #         # print(z)
+                       
+                #         # print(lat)
+                #         lat,lon = mean(lat),mean(lon)
+                #         # lat += 0.001
+                #         # feature['geometry'] = {'coordinates': [ [4.468920000000006, 51.924213999992006],[4.46891999793304, 51.92377142238439], [4.4696358074567515, 51.92377141924936], [4.469635815530895, 51.924213996856935],[4.468920000000006, 51.924213999992006]],'type': 'Polygon'}
+                #         # feature['geometry'] = {'coordinates': [lat,lon],'type': 'Point'}
+                #         # feature['properties'] = {self.name:random()}
+                #         # feature['properties'] = {self.name: random.randint(0, 20)}
+                #         print(offices)
+                        # test = 10
+                # if (offices < 6 and name == "Park") or (offices >= 6 and name == "Office") : 
+                        # print("doing something")
+                heat_points = parks
+                if offices >= 6:
+                        heat_points = office_points
+                
+                for x, y in heat_points:
+                        feature={}
+                        feature['geometry'] = {'coordinates': [x,y],'type': 'Point'}
+                        feature['properties'] = {self.name: random.randint(0, 20)}
+                        #         feature['properties'] = {self.name: test, "whatever": 6}
+                        #         feature['properties'] = {self.name: test, "whatever": 6}
                         features.append(feature)
                 out = {'type':'FeatureCollection','features':features}
                 return out
+
