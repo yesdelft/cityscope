@@ -199,6 +199,7 @@ class Cityscopy:
 
     # run the video loop forever
         while True:
+            # self.init_keystone = self.get_init_keystone()
             # get a new matrix transformation every frame
             keystone_data = self.transfrom_matrix(
                 video_resolution_x, video_resolution_y, self.listen_to_UI_interaction(self.init_keystone))
@@ -642,7 +643,7 @@ class Cityscopy:
         # create np colors array with table struct
         np_array_of_scanned_colors = np.reshape(
             cellColorsArray, (grid_dimensions_x * grid_dimensions_y, 16))
-
+        print(np_array_of_scanned_colors[0])
         # go through the results
         for this_16_bits in np_array_of_scanned_colors:
             result_tag = self.brick_rotation_check(
