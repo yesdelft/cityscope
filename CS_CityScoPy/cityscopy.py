@@ -643,7 +643,7 @@ class Cityscopy:
         # create np colors array with table struct
         np_array_of_scanned_colors = np.reshape(
             cellColorsArray, (grid_dimensions_x * grid_dimensions_y, 16))
-        print(np_array_of_scanned_colors[0])
+        # print(np_array_of_scanned_colors[0])
         # go through the results
         for this_16_bits in np_array_of_scanned_colors:
             result_tag = self.brick_rotation_check(

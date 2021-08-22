@@ -2,6 +2,8 @@ from brix import Handler
 import time
 import json
 import os
+import hashlib
+
 types = {
     -1:"Invalid", 
     0:"Institutional", 
@@ -42,10 +44,17 @@ def update_types(geogrid_data):
 
 
 def periodic_work(interval):
+    oldHash = ""
     while True:
         #change this to the function you want to call, or paste in the code you want to run
         monkey = Monkey()
-        monkey.ook()
+        # monkey.ook()
+        with open('CS_CityScoPy/scanner_data.txt', "rb") as f:
+                newHash = hashlib.md5(f.read()).hexdigest()
+                if oldHash != newHash:
+                        perform_update() 
+                        oldHash = newHash
+    
         # perform_update()
         #interval should be an integer, the number of seconds to wait
         time.sleep(interval) 
@@ -58,8 +67,11 @@ class Monkey(object):
 
     def ook(self):
         stamp = os.stat(self.filename).st_mtime
+        print("old stamp ", stamp)
         if stamp != self._cached_stamp:
             self._cached_stamp = stamp
+            
+            print("they are different")
             # File has changed, so do something
             perform_update()
         else:
