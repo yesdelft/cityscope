@@ -29,7 +29,7 @@ def update_types(geogrid_data):
                 return geogrid_data
         # print(geogrid_data)
         for i, cell in enumerate(geogrid_data):
-                if i > 3: 
+                if i >= 1: 
                         continue
                 cell['name'] = 'Institutional'
                 id = cell["id"]
