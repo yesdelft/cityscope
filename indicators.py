@@ -109,7 +109,7 @@ class Noise(Indicator):
                 # if (offices < 6 and name == "Park") or (offices >= 6 and name == "Office") : 
                         # print("doing something")
                 heat_points = parks
-                if offices >= 6:
+                if offices >= 8:
                         heat_points = office_points
                 
                 for x, y in heat_points:

@@ -6,7 +6,7 @@
         "nrows": 4,
         "ncols": 4,
         "cell_gap": 10,
-        "camId": 1,
+        "camId": 2,
         "interval": 500,
         "gui": true,
         "cityio": true,
