@@ -1,7 +1,7 @@
 # CityScope
 ## Backend
 
-### environments
+### Environments
 
 CityScoPy and the rest of the code are run in different environments, so each will require the creation of a separate environment.
 
@@ -27,7 +27,7 @@ if there are more than X offices, and otherwise displace the heat maps on some p
 * run `CS_CityScoPy/run.py` with CityScoPy environment
 * run `scanning.py` with general environment
 * run `city.py` with general environment
-* navigate to https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=yourtest to see results
+* navigate to the [MIT servers front-end](https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=yourtest) or a local front-end to see results
 
 ### Additional explanation
 
@@ -58,13 +58,16 @@ server. Currently, it simply displays `Corona` heat maps on every office if ther
 
 ### Improvements for the future
 
-Send it to the right endpoint
+* Most of the current visuals (e.g. traffic simulation) were manually created and pushed to the server with the API. For the future, it would be useful to use backend modules to do this
+instead. 
+* Some options are to start by trying to run the urban indicators module or the mobility service module. Setting these up can be problematic due to missing files and problems with the environment.
+For the urban indicators module, it is recommended to use the docker file.
+* The GAMA module might be an interesting one to look at, as it contains a decent amount of the documentation and can provide functionality for agent-based simulations.
+* Scanner system currently uses a workaround, might be worth figuring out how to properly send type data to the grid endpoint
 
-to do
--how to modify the scanner
--possibly sending type data to the server
--how to set up the urban indicator and mobility scanner and maybe doing gamma
--explaining core compound
+### Useful to know
+
+* JSON data can be sent to the server via the API by posting directly to the endpoint. E.g. posting to https://cityio.media.mit.edu/api/table/yourtest/ABM2 for traffic data.
 
 ## Frontend
 
@@ -77,3 +80,26 @@ This project is set up in JavaScript using node react
 * once the installation has taken place, we are good to go , run the command `npm start`
 * It will take a while to initialize and once done, the webpage should pop up in the default browser with the address of (http://localhost:3000/CS_cityscopeJS)
 * To access the rotterdam project you need to change the URL to (http://localhost:3000/CS_cityscopeJS/?cityscope=yourtest)
+
+
+## Useful links
+
+* [GitHub repository](https://github.com/CityScope)
+* [Project guide](https://cityscope.media.mit.edu)
+
+* [Grid editor](https://cityscope.media.mit.edu/CS_cityscopeJS/#/editor): can be used to create a new table
+* [Our table](https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=yourtest): the MIT server frontend for our table
+
+
+
+* [Front-end](https://github.com/CityScope/CS_cityscopeJS): repository for the frontend
+* [City IO](https://github.com/CityScope/CS_CityIO/): repository for the cityIO server
+* [CityScoPy](https://github.com/CityScope/CS_CityScoPy): repository for the scanner system
+* [Grid maker](https://github.com/CityScope/CS_Grid_Maker/): creating grid, defining interactive region and assigning properties
+* [Urban indicators](https://github.com/CityScope/CS_Urban_Indicators), [Mobility service](https://github.com/CityScope/CS_Mobility_Service): useful urban analytics and mobility simulation modules
+* [GAMA simulation](https://github.com/CityScope/CS_Simulation_GAMA), [GAMA](https://github.com/CityScope/CS_GAMABrix/tree/d1385f98eda6e08fc39701ab42f88bc3fb4a4edc): repository for GAMA model, including documentation and examples on setting up
+indicators with GAMA.
+* [Brix guide](https://cityscope.media.mit.edu/CS_Brix): very useful link which contains an introduction of the Brix system and indicators. It also includes guides and examples
+for using bricks to set up a basic indicator and attach it to the table. Finally, it includes function definitions and guides for some important classes.
+* [Brix examples](https://github.com/CityScope/cityscope.github.io/blob/856bde91d1ee175f954dddaf3693d3bd27d6995a/docsite/docs/modules/Brix/Examples/Examples.md): contains Brix
+examples, including for composite and hybrid indicators and heat maps.
