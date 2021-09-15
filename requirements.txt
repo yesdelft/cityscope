@@ -1,0 +1,3 @@
+requests==2.25.1
+cs-brix==0.0.10
+pandas==1.3.2
