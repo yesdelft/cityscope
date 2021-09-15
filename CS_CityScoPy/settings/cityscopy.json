@@ -1,0 +1,20 @@
+{
+    "cityscopy": {
+        "cityscope_project_name": "yourtest",
+        "type": ["0", "1", "2", "3", "4", "5"],
+        "rotation": ["0", "1", "2", "3"],
+        "nrows": 4,
+        "ncols": 4,
+        "cell_gap": 10,
+        "camId": 2,
+        "interval": 500,
+        "gui": true,
+        "cityio": true,
+        "tags": [
+            "0000000000000000",
+            "1111111111111111",
+            "0011111111111111"
+        ],
+        "mirror_cam": false
+    }
+}
