@@ -19,6 +19,7 @@ import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
 // import test_trip_data from "./test_trip_data.json";
+import ui_control from "./ui_control.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 
 class Map extends Component {
@@ -539,9 +540,8 @@ class Map extends Component {
             );
         }
 
-
-
-        if (menu.includes("AQI")) 
+        if (ui_control.LST.enabled) 
+        // if (menu.includes("AQI")) 
         {      
         // console.log("hi I am in here");
         layers.push(
