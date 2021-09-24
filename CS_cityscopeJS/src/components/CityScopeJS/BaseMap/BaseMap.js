@@ -21,7 +21,7 @@ import settings from "../../../settings/settings.json";
 // import test_trip_data from "./test_trip_data.json";
 import ui_control from "./ui_control.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
-
+import axios from "axios";
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -41,6 +41,7 @@ class Map extends Component {
         if (this.animationFrame) {
             window.cancelAnimationFrame(this.animationFrame);
         }
+        this._isMounted = false;
     }
 
     componentDidMount() {
@@ -52,6 +53,9 @@ class Map extends Component {
         this._setViewStateToTableHeader();
         // start ainmation/sim/roate
         this._animate();
+
+        this._isMounted = true;
+        this.handleUIURL()
     }
 
     /**
@@ -160,6 +164,56 @@ class Map extends Component {
 
         this.setState({ viewState });
     };
+
+    
+    getUIData = (URL) => {
+        axios
+            .get(URL)
+            .then((response) => {
+                // put response to state obj
+                console.log("receiving UI data:");//, response);
+                
+               
+            })
+
+            .catch((error) => {
+                if (error.response) {
+                    console.log(
+                        "error.response:",
+                        "\n",
+                        error.response.data,
+                        "\n",
+                        error.response.status,
+                        "\n",
+                        error.response.headers
+                    );
+                } else if (error.request) {
+                    console.log("error.request:", error.request);
+                } else {
+                    console.log("misc error:", error.message);
+                }
+                console.log("request config:", error.config);
+            });
+    };
+	
+    handleUIURL = () => {
+        // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
+        let cityioURL = "https://reqres.in/api/users/2";
+		this.getUIData(cityioURL)
+		let interval = 10000
+        // and every interval
+        this.timer = setInterval(() => {
+            if (this._isMounted) {
+                this.getUIData(cityioURL)
+            }
+        }, interval);
+        console.log(
+            "starting UI GET interval every " +
+                interval +
+                "ms "
+        );
+    };
+
 
     /**
      * resets the camera viewport
