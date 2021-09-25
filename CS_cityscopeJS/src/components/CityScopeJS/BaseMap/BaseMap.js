@@ -171,8 +171,8 @@ class Map extends Component {
             .get(URL)
             .then((response) => {
                 // put response to state obj
-                console.log("receiving UI data:");//, response);
-                
+                console.log("receiving UI data:", response.data);
+                this.setState({ remoteMenu: response.data.data}) 
                
             })
 
@@ -413,6 +413,9 @@ class Map extends Component {
         const { cityioData, selectedType, menu, ABMmode } = this.props;
 
         let layers = [];
+        
+        console.log("rear rendering");
+        console.log("many state:",this.state.remoteMenu);
 
         if (menu.includes("ABM")) {
             layers.push(
