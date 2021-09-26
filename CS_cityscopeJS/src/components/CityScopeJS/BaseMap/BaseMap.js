@@ -173,17 +173,23 @@ class Map extends Component {
             .get(URL)
             .then((response) => {
                 // put response to state obj
-                console.log("receiving UI data:", response.data);
+                // console.log("receiving UI data:", response.data);
                 // let payload = ui_control;
                 let payload = response.data;
                 let previousMenu = this.state.remoteMenu;
-                if (!previousMenu.toggles.includes("ABM") && 
-                    payload.toggles.includes("ABM")) {
+                if (
+                    !previousMenu.toggles.includes("ABM") && 
+                    payload.toggles.includes("ABM")
+                ) {
                     this.setState({ remoteAnimateABM: true });
-                    }else                 if (previousMenu.toggles.includes("ABM") && 
-                        !payload.toggles.includes("ABM")) {
-                        this.setState({ remoteAnimateABM: false });
-                        }
+                    // console.log("setting remote anime true");
+                } else if (
+                    previousMenu.toggles.includes("ABM") && 
+                    !payload.toggles.includes("ABM")
+                ) {
+                    this.setState({ remoteAnimateABM: false });
+                    // console.log("setting remote anime false");
+                }
                 this.setState({ remoteMenu: payload}); 
             })
 
@@ -212,7 +218,7 @@ class Map extends Component {
         // let cityioURL = "https://reqres.in/api/users/2";
         let cityioURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
 		this.getUIData(cityioURL)
-		let interval = 10000
+		let interval = 2000
         // and every interval
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
@@ -430,8 +436,8 @@ class Map extends Component {
 
         let layers = [];
         
-        console.log("rear rendering");
-        console.log("many state:",this.state.remoteMenu);
+        // console.log("rear rendering");
+        console.log("remote state:",this.state.remoteMenu);
         let remote = this.state.remoteMenu;
         let controlRemotely = this.state.controlRemotely
 
@@ -589,11 +595,13 @@ class Map extends Component {
         }
 
         // if (menu.includes("ACCESS")) {
-        if ((controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))) {
+        let accessToggle = (controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))
+        if (accessToggle) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
-                    visible: menu.includes("ACCESS"),
+                    // visible: menu.includes("ACCESS"),
+                    visible: accessToggle,
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
