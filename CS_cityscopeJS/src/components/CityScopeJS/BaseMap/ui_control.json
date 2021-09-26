@@ -1,5 +1,5 @@
 {
-    "toggles": ["AQI", "ABM"],  
+    "toggles": ["ABM"],  
     "LST": {
         "enabled": false
     }

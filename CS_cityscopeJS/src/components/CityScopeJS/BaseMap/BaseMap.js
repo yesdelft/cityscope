@@ -33,6 +33,7 @@ class Map extends Component {
             selectedCellsState: null,
             pickingRadius: 40,
             viewState: settings.map.initialViewState,
+            controlRemotely: true,
         };
         this.animationFrame = null;
     }
@@ -172,8 +173,16 @@ class Map extends Component {
             .then((response) => {
                 // put response to state obj
                 console.log("receiving UI data:", response.data);
-                this.setState({ remoteMenu: response.data.data}) 
-               
+                let payload = ui_control;
+                let previousMenu = this.state.remoteMenu;
+                if (!previousMenu.toggles.includes("ABM") && 
+                    payload.toggles.includes("ABM")) {
+                    this.setState({ remoteAnimateABM: true });
+                    }else                 if (previousMenu.toggles.includes("ABM") && 
+                        !payload.toggles.includes("ABM")) {
+                        this.setState({ remoteAnimateABM: false });
+                        }
+                this.setState({ remoteMenu: payload}); 
             })
 
             .catch((error) => {
@@ -203,7 +212,7 @@ class Map extends Component {
 		let interval = 10000
         // and every interval
         this.timer = setInterval(() => {
-            if (this._isMounted) {
+            if (this._isMounted && this.state.controlRemotely) {
                 this.getUIData(cityioURL)
             }
         }, interval);
@@ -281,7 +290,11 @@ class Map extends Component {
             });
         }
 
-        if (this.state.animateABM) {
+        // if (this.state.animateABM) {
+        let controlRemotely = this.state.controlRemotely
+        let remote = this.state.remoteMenu;
+
+        if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
             const time = this.props.sliders.time[1];
             const speed = this.props.sliders.speed;
             const startHour = this.props.sliders.time[0];
@@ -417,13 +430,14 @@ class Map extends Component {
         console.log("rear rendering");
         console.log("many state:",this.state.remoteMenu);
         let remote = this.state.remoteMenu;
-        let controlRemotely = true
+        let controlRemotely = this.state.controlRemotely
 
-        if ((controlRemotely && ui_control.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM"))) {
+        if ((controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM"))) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
-                    visible: menu.includes("ABM") ? true : false,
+                    // visible: menu.includes("ABM") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM")) ? true : false,
                     data: cityioData.ABM2.trips,
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
@@ -451,11 +465,13 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("AGGREGATED_TRIPS")) {
+        // if (menu.includes("AGGREGATED_TRIPS")) {
+        if ((controlRemotely && remote.toggles.includes("AGGREGATED_TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS"))) {
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
-                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
+                    // visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("AGGREGATED_TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS")) ? true : false,
                     _shadow: false,
                     data: cityioData.ABM2.trips,
                     getPath: (d) => {
@@ -554,7 +570,7 @@ class Map extends Component {
 
 
         // if (menu.includes("Bounds")) {
-            if ((controlRemotely && ui_control.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
+            if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
                     new SolidPolygonLayer({
                         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
@@ -569,7 +585,7 @@ class Map extends Component {
         }
 
         // if (menu.includes("ACCESS")) {
-        if ((controlRemotely && ui_control.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))) {
+        if ((controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
