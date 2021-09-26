@@ -1,5 +1,5 @@
 {
-    "toggles": ["ABM"],  
+    "toggles": ["LST"],  
     "LST": {
         "enabled": false
     }
