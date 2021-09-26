@@ -416,8 +416,10 @@ class Map extends Component {
         
         console.log("rear rendering");
         console.log("many state:",this.state.remoteMenu);
+        let remote = this.state.remoteMenu;
+        let controlRemotely = true
 
-        if (menu.includes("ABM")) {
+        if ((controlRemotely && ui_control.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM"))) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
@@ -551,7 +553,8 @@ class Map extends Component {
         }
 
 
-        if (menu.includes("Bounds")) {
+        // if (menu.includes("Bounds")) {
+            if ((controlRemotely && ui_control.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
                     new SolidPolygonLayer({
                         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
@@ -565,7 +568,8 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("ACCESS")) {
+        // if (menu.includes("ACCESS")) {
+        if ((controlRemotely && ui_control.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
@@ -586,8 +590,9 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("LST")) 
-        {
+        // if (menu.includes("LST")) 
+        // {
+        if ((controlRemotely && ui_control.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))) {
         layers.push(
             new BitmapLayer({
                 id: 'bitmap-layer',
@@ -597,9 +602,10 @@ class Map extends Component {
             );
         }
 
-        if (ui_control.LST.enabled) 
+        // if (ui_control.LST.enabled) 
+        if ((controlRemotely && ui_control.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))) {
         // if (menu.includes("AQI")) 
-        {      
+        // {      
         // console.log("hi I am in here");
         layers.push(
                     // new TileLayer(
