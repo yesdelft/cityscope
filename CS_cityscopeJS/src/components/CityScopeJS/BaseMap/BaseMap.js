@@ -34,6 +34,7 @@ class Map extends Component {
             pickingRadius: 40,
             viewState: settings.map.initialViewState,
             controlRemotely: true,
+            remoteMenu: {toggles: []}
         };
         this.animationFrame = null;
     }
@@ -173,7 +174,8 @@ class Map extends Component {
             .then((response) => {
                 // put response to state obj
                 console.log("receiving UI data:", response.data);
-                let payload = ui_control;
+                // let payload = ui_control;
+                let payload = response.data;
                 let previousMenu = this.state.remoteMenu;
                 if (!previousMenu.toggles.includes("ABM") && 
                     payload.toggles.includes("ABM")) {
@@ -207,7 +209,8 @@ class Map extends Component {
 	
     handleUIURL = () => {
         // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
-        let cityioURL = "https://reqres.in/api/users/2";
+        // let cityioURL = "https://reqres.in/api/users/2";
+        let cityioURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
 		this.getUIData(cityioURL)
 		let interval = 10000
         // and every interval
@@ -505,12 +508,13 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("GRID")) {
+        // if (menu.includes("GRID")) {
+        if ((controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID"))) {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
                     data: this.state.GEOGRID,
-                    visible: menu.includes("GRID") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID")) ? true : false,
                     pickable: true,
                     extruded: true,
                     wireframe: true,
@@ -608,7 +612,7 @@ class Map extends Component {
 
         // if (menu.includes("LST")) 
         // {
-        if ((controlRemotely && ui_control.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))) {
+        if ((controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))) {
         layers.push(
             new BitmapLayer({
                 id: 'bitmap-layer',
@@ -619,7 +623,7 @@ class Map extends Component {
         }
 
         // if (ui_control.LST.enabled) 
-        if ((controlRemotely && ui_control.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))) {
+        if ((controlRemotely && remote.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))) {
         // if (menu.includes("AQI")) 
         // {      
         // console.log("hi I am in here");
