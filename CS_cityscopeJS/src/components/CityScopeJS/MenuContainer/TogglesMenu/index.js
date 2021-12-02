@@ -13,6 +13,8 @@ import ShadowSubmenu from "./ShadowSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
+import cityioFakeABMData from "../../../../settings/fake_ABM.json";
+
 
 function TogglesMenu(props) {
     let drawerWidth = 300;
@@ -86,7 +88,7 @@ function TogglesMenu(props) {
 
                         listOfToggles[i] === "ABM" && (
                             <Collapse in={checked} style={{ width: "100%" }}>
-                                <ABMSubmenu tripsData={cityioData.ABM2.attr} />
+                                <ABMSubmenu tripsData={cityioFakeABMData.attr} />
                             </Collapse>
                         )
                     }
