@@ -35,12 +35,12 @@
             "ABM": {
                 "displayName": "Mobility Simulation",
                 "showOnInit": false,
-                "requireModule": "ABM2"
+                "requireModule": false
             },
             "AGGREGATED_TRIPS": {
                 "displayName": "Aggregated Trips",
                 "showOnInit": false,
-                "requireModule": "ABM2"
+                "requireModule": false
             },
             "Bounds":{
                 "displayName": "Display Extent Table projection adjustment",
