@@ -18,10 +18,14 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
-// import test_trip_data from "./test_trip_data.json";
 import ui_control from "./ui_control.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 import axios from "axios";
+
+// import test_trip_data from "./test_trip_data.json";
+// below line added for fake ABM data
+import cityioFakeABMData from "../../../settings/fake_ABM.json";
+
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -447,12 +451,12 @@ class Map extends Component {
                     id: "ABM",
                     // visible: menu.includes("ABM") ? true : false,
                     visible: (controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM")) ? true : false,
-                    data: cityioData.ABM2.trips,
+                    data: cityioFakeABMData.trips,
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
+                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
@@ -482,7 +486,7 @@ class Map extends Component {
                     // visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
                     visible: (controlRemotely && remote.toggles.includes("AGGREGATED_TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS")) ? true : false,
                     _shadow: false,
-                    data: cityioData.ABM2.trips,
+                    data: cityioFakeABMData.trips,
                     getPath: (d) => {
                         const noisePath =
                             Math.random() < 0.5
@@ -497,7 +501,7 @@ class Map extends Component {
                     },
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
+                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
