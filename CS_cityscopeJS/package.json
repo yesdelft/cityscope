@@ -6,6 +6,7 @@
     "dependencies": {
         "@material-ui/core": "^4.10.2",
         "@material-ui/icons": "^4.9.1",
+        "@material-ui/styles": "^4.11.4",
         "axios": "^0.19.2",
         "cors": "^2.8.5",
         "deck.gl": "^7.3.15",
