@@ -106,5 +106,16 @@ examples, including for composite and hybrid indicators and heat maps.
 
 
 ## General instructions
-### Set up
+### Set up prerequisite programs
+* [Install git](https://git-scm.com/downloads)
+* [Install visual Studio code](https://code.visualstudio.com/download)
+* [Install NodeJS](https://nodejs.org/en/download/)
+(you might need to restart your computer to make sure NPM is added to your path)
+* Click the `code` button on this webpage
+* Copy the .git link
+* Open git terminal
+* run `git clone [insert .git link here]`
+* Open the folder in VSCode
+* Click terminal at the top > New Terminal
+* Follow the instructions for setting up the frontend
 ### Inserting custom layers
