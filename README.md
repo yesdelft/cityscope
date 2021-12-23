@@ -103,3 +103,8 @@ indicators with GAMA.
 for using bricks to set up a basic indicator and attach it to the table. Finally, it includes function definitions and guides for some important classes.
 * [Brix examples](https://github.com/CityScope/cityscope.github.io/blob/856bde91d1ee175f954dddaf3693d3bd27d6995a/docsite/docs/modules/Brix/Examples/Examples.md): contains Brix
 examples, including for composite and hybrid indicators and heat maps.
+
+
+## General instructions
+### Set up
+### Inserting custom layers
