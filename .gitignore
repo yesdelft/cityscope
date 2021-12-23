@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# env and package lock file
+CS_cityscopeJS/package-lock.json
+CS_cityscopeJS/.env

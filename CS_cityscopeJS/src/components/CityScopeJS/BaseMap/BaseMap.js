@@ -18,8 +18,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
-// import test_trip_data from "./test_trip_data.json";
+import ui_control from "./ui_control.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
+import axios from "axios";
+
+// import test_trip_data from "./test_trip_data.json";
+// below line added for fake ABM data
+import cityioFakeABMData from "../../../settings/fake_ABM.json";
 
 class Map extends Component {
     constructor(props) {
@@ -32,6 +37,8 @@ class Map extends Component {
             selectedCellsState: null,
             pickingRadius: 40,
             viewState: settings.map.initialViewState,
+            controlRemotely: true,
+            remoteMenu: {toggles: []}
         };
         this.animationFrame = null;
     }
@@ -40,6 +47,7 @@ class Map extends Component {
         if (this.animationFrame) {
             window.cancelAnimationFrame(this.animationFrame);
         }
+        this._isMounted = false;
     }
 
     componentDidMount() {
@@ -51,6 +59,9 @@ class Map extends Component {
         this._setViewStateToTableHeader();
         // start ainmation/sim/roate
         this._animate();
+
+        this._isMounted = true;
+        this.handleUIURL()
     }
 
     /**
@@ -78,6 +89,18 @@ class Map extends Component {
             }
         }
 
+        // toggle REMOTE UI
+        if (
+            !prevProps.menu.includes("REMOTE") &&
+            this.props.menu.includes("REMOTE")
+        ) {
+            this.setState({ controlRemotely: true });
+        } else if (
+            prevProps.menu.includes("REMOTE") &&
+            !this.props.menu.includes("REMOTE")
+        ) {
+            this.setState({ controlRemotely: false });
+        }
         // toggle ABM animation
         if (
             !prevProps.menu.includes("ABM") &&
@@ -160,6 +183,72 @@ class Map extends Component {
         this.setState({ viewState });
     };
 
+    
+    getUIData = (URL) => {
+        axios
+            .get(URL)
+            .then((response) => {
+                // put response to state obj
+                // console.log("receiving UI data:", response.data);
+                // let payload = ui_control;
+                let payload = response.data;
+                let previousMenu = this.state.remoteMenu;
+                if (
+                    !previousMenu.toggles.includes("ABM") && 
+                    payload.toggles.includes("ABM")
+                ) {
+                    this.setState({ remoteAnimateABM: true });
+                    // console.log("setting remote anime true");
+                } else if (
+                    previousMenu.toggles.includes("ABM") && 
+                    !payload.toggles.includes("ABM")
+                ) {
+                    this.setState({ remoteAnimateABM: false });
+                    // console.log("setting remote anime false");
+                }
+                this.setState({ remoteMenu: payload}); 
+            })
+
+            .catch((error) => {
+                if (error.response) {
+                    console.log(
+                        "error.response:",
+                        "\n",
+                        error.response.data,
+                        "\n",
+                        error.response.status,
+                        "\n",
+                        error.response.headers
+                    );
+                } else if (error.request) {
+                    console.log("error.request:", error.request);
+                } else {
+                    console.log("misc error:", error.message);
+                }
+                console.log("request config:", error.config);
+            });
+    };
+	
+    handleUIURL = () => {
+        // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
+        // let cityioURL = "https://reqres.in/api/users/2";
+        let cityioURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
+		this.getUIData(cityioURL)
+		let interval = 2000
+        // and every interval
+        this.timer = setInterval(() => {
+            if (this._isMounted && this.state.controlRemotely) {
+                this.getUIData(cityioURL)
+            }
+        }, interval);
+        console.log(
+            "starting UI GET interval every " +
+                interval +
+                "ms "
+        );
+    };
+
+
     /**
      * resets the camera viewport
      * to cityIO header data
@@ -226,7 +315,11 @@ class Map extends Component {
             });
         }
 
-        if (this.state.animateABM) {
+        // if (this.state.animateABM) {
+        let controlRemotely = this.state.controlRemotely
+        let remote = this.state.remoteMenu;
+
+        if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
             const time = this.props.sliders.time[1];
             const speed = this.props.sliders.speed;
             const startHour = this.props.sliders.time[0];
@@ -358,18 +451,24 @@ class Map extends Component {
         const { cityioData, selectedType, menu, ABMmode } = this.props;
 
         let layers = [];
+        
+        // console.log("rear rendering");
+        console.log("remote state:",this.state.remoteMenu);
+        let remote = this.state.remoteMenu;
+        let controlRemotely = this.state.controlRemotely
 
-        if (menu.includes("ABM")) {
+        if ((controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM"))) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
-                    visible: menu.includes("ABM") ? true : false,
-                    data: cityioData.ABM2.trips,
+                    // visible: menu.includes("ABM") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM")) ? true : false,
+                    data: cityioFakeABMData.trips,
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
+                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
@@ -391,13 +490,15 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("AGGREGATED_TRIPS")) {
+        // if (menu.includes("AGGREGATED_TRIPS")) {
+        if ((controlRemotely && remote.toggles.includes("AGGREGATED TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS"))) {
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
-                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
+                    // visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("AGGREGATED TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS")) ? true : false,
                     _shadow: false,
-                    data: cityioData.ABM2.trips,
+                    data: cityioFakeABMData.trips,
                     getPath: (d) => {
                         const noisePath =
                             Math.random() < 0.5
@@ -412,7 +513,7 @@ class Map extends Component {
                     },
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
+                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
@@ -429,12 +530,13 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("GRID")) {
+        // if (menu.includes("GRID")) {
+        if ((controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID"))) {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
                     data: this.state.GEOGRID,
-                    visible: menu.includes("GRID") ? true : false,
+                    visible: (controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID")) ? true : false,
                     pickable: true,
                     extruded: true,
                     wireframe: true,
@@ -493,7 +595,8 @@ class Map extends Component {
         }
 
 
-        if (menu.includes("Bounds")) {
+        // if (menu.includes("Bounds")) {
+            if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
                     new SolidPolygonLayer({
                         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
@@ -507,11 +610,14 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("ACCESS")) {
+        // if (menu.includes("ACCESS")) {
+        let accessToggle = (controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))
+        if (accessToggle) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
-                    visible: menu.includes("ACCESS"),
+                    // visible: menu.includes("ACCESS"),
+                    visible: accessToggle,
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
@@ -528,8 +634,10 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("LST")) 
-        {
+        // if (menu.includes("LST")) 
+        // {
+        let LSTAccessToggle = (controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))
+        if (LSTAccessToggle) {
         layers.push(
             new BitmapLayer({
                 id: 'bitmap-layer',
@@ -539,10 +647,11 @@ class Map extends Component {
             );
         }
 
-
-
-        if (menu.includes("AQI")) 
-        {      
+        // if (ui_control.LST.enabled) 
+        let AQIAccessToggle = (controlRemotely && remote.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))
+        if (!LSTAccessToggle && AQIAccessToggle) {
+        // if (menu.includes("AQI")) 
+        // {      
         // console.log("hi I am in here");
         layers.push(
                     // new TileLayer(
@@ -577,6 +686,13 @@ class Map extends Component {
                     ); 
                     
         }
+        // if (menu.includes("REMOTE")) {
+        //     this.setState({
+        //         controlRemotely: true,
+        //     })
+
+
+        // }
         // console.log("menu//:", this.props);
         return layers;
     }
