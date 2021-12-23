@@ -10,21 +10,25 @@ import {
     testHex,
     hexToRgb,
 } from "./BaseMapUtils";
+
+import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
+
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
 import {SolidPolygonLayer, BitmapLayer} from '@deck.gl/layers';
-import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
-import settings from "../../../settings/settings.json";
-import ui_control from "./ui_control.json";
+
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
+
 import axios from "axios";
 
-// import test_trip_data from "./test_trip_data.json";
-// below line added for fake ABM data
-import cityioFakeABMData from "../../../settings/fake_ABM.json";
+// data from externally added json files
+import ui_control from "./ui_control.json";
+import settings from "../../../settings/settings.json";
+import grid_200_data from "../../../data/grid200.geojson";
+import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 
 class Map extends Component {
     constructor(props) {
@@ -637,7 +641,8 @@ class Map extends Component {
         // if (menu.includes("LST")) 
         // {
         let LSTAccessToggle = (controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))
-        if (LSTAccessToggle) {
+        if (LSTAccessToggle)
+        {
         layers.push(
             new BitmapLayer({
                 id: 'bitmap-layer',
@@ -686,12 +691,54 @@ class Map extends Component {
                     ); 
                     
         }
+
+        if ((controlRemotely && remote.toggles.includes("calibrationGridLayer")) || (!controlRemotely && menu.includes("calibrationGridLayer")) ) 
+        {
+            layers.push(
+                new GeoJsonLayer({
+                    id: 'geojson-layer',
+                    data: grid_200_data,
+                    pickable: true,
+                    stroked: false,
+                    filled: false,
+                    extruded: true,
+                    wireframe:true,
+                    pointType: 'circle',
+                    lineWidthScale: 1,
+                    lineWidthMinPixels: 2,
+                    // getFillColor: [160, 160, 180, 200],
+                    // getLineColor: d => colorToRGBArray(d.properties.color),
+                    getPointRadius: 10,
+                    getLineWidth: 1,
+                    getElevation: 30
+                  })
+                // new ScreenGridLayer(
+                //     {
+                //     id: 'screen-grid-layer',
+                //     data,
+                //     pickable: false,
+                //     opacity: 0.8,
+                //     cellSizePixels: 200,
+                //     colorRange: [
+                //         [0, 25, 0, 25],
+                //         [0, 85, 0, 85],
+                //         [0, 127, 0, 127],
+                //         [0, 170, 0, 170],
+                //         [0, 190, 0, 190],
+                //         [0, 255, 0, 255]
+                //         ],
+                //     getPosition: d => d.COORDINATES,
+                //     getWeight: d => d.SPACES
+                //     })
+             );
+        }   
+
+
+
         // if (menu.includes("REMOTE")) {
         //     this.setState({
         //         controlRemotely: true,
         //     })
-
-
         // }
         // console.log("menu//:", this.props);
         return layers;
