@@ -46,6 +46,10 @@
                 "displayName": "Display Extent Table projection adjustment",
                 "showOnInit": false,
                 "requireModule": false},
+            "REMOTE":{
+                "displayName": "Remote Ui",
+                "showOnInit": true,
+                "requireModule": false},
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
                 "showOnInit": false,

@@ -89,6 +89,18 @@ class Map extends Component {
             }
         }
 
+        // toggle REMOTE UI
+        if (
+            !prevProps.menu.includes("REMOTE") &&
+            this.props.menu.includes("REMOTE")
+        ) {
+            this.setState({ controlRemotely: true });
+        } else if (
+            prevProps.menu.includes("REMOTE") &&
+            !this.props.menu.includes("REMOTE")
+        ) {
+            this.setState({ controlRemotely: false });
+        }
         // toggle ABM animation
         if (
             !prevProps.menu.includes("ABM") &&
@@ -674,6 +686,13 @@ class Map extends Component {
                     ); 
                     
         }
+        // if (menu.includes("REMOTE")) {
+        //     this.setState({
+        //         controlRemotely: true,
+        //     })
+
+
+        // }
         // console.log("menu//:", this.props);
         return layers;
     }
