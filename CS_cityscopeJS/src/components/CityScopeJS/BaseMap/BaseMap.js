@@ -624,7 +624,8 @@ class Map extends Component {
 
         // if (menu.includes("LST")) 
         // {
-        if ((controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))) {
+        let LSTAccessToggle = (controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))
+        if (LSTAccessToggle) {
         layers.push(
             new BitmapLayer({
                 id: 'bitmap-layer',
@@ -635,7 +636,8 @@ class Map extends Component {
         }
 
         // if (ui_control.LST.enabled) 
-        if ((controlRemotely && remote.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))) {
+        let AQIAccessToggle = (controlRemotely && remote.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))
+        if (!LSTAccessToggle && AQIAccessToggle) {
         // if (menu.includes("AQI")) 
         // {      
         // console.log("hi I am in here");
