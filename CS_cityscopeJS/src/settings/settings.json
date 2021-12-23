@@ -106,6 +106,12 @@
             "zoom": 17,
             "pitch": 0,
             "bearing": 0
+        },
+        "viewCalibration": {
+            "zoom": 15,
+            "pitch": 0,
+            "longitude":  4.489405,
+            "latitude": 51.91314
         }
     }
 }
