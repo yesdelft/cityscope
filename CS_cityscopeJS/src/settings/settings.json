@@ -26,7 +26,8 @@
             "AQI":{
                 "displayName": "Air Quality Index",
                 "showOnInit": false,
-                "requireModule": false},
+                "requireModule": false
+            },
             "LST":{
                 "displayName": "LST",
                 "showOnInit": false,
@@ -45,11 +46,13 @@
             "Bounds":{
                 "displayName": "Display Extent Table projection adjustment",
                 "showOnInit": false,
-                "requireModule": false},
+                "requireModule": false
+            },
             "REMOTE":{
                 "displayName": "Remote Ui",
                 "showOnInit": true,
-                "requireModule": false},
+                "requireModule": false
+            },
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
                 "showOnInit": false,
@@ -73,6 +76,11 @@
             "KEYSTONE": {
                 "displayName": "Projection Mapping",
                 "showOnInit": false,
+                "requireModule": false
+            },
+            "calibrationGridLayer":{
+                "displayName": "Guideline Grid",
+                "showOnInit": true,
                 "requireModule": false
             }
         }
