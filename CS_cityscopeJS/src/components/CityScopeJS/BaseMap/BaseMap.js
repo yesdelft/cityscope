@@ -259,7 +259,7 @@ class Map extends Component {
      * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
      */
     _setViewStateToTableHeader() {
-        const header = this.props.cityioData.GEOGRID.properties.header;
+        // const header = this.props.cityioData.GEOGRID.properties.header;
 
         this.setState({
             viewState: {
@@ -270,7 +270,7 @@ class Map extends Component {
                 // latitude: header.latitude,
                 zoom: settings.map.viewCalibration.zoom,
                 pitch: settings.map.viewCalibration.pitch,
-                bearing: 360 - header.rotation,
+                bearing: 360 - 0,// header.rotation,
                 orthographic: true,
             },
         });
@@ -459,7 +459,7 @@ class Map extends Component {
         let layers = [];
         
         // console.log("rear rendering");
-        console.log("remote state:",this.state.remoteMenu);
+        // console.log("remote state:",this.state.remoteMenu);
         let remote = this.state.remoteMenu;
         let controlRemotely = this.state.controlRemotely
 
