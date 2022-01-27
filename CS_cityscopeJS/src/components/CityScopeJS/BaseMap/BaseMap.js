@@ -264,10 +264,12 @@ class Map extends Component {
         this.setState({
             viewState: {
                 ...this.state.viewState,
-                longitude: header.longitude,
-                latitude: header.latitude,
-                zoom: 15,
-                pitch: 0,
+                longitude: settings.map.viewCalibration.longitude,
+                latitude: settings.map.viewCalibration.latitude,
+                // longitude: header.longitude,
+                // latitude: header.latitude,
+                zoom: settings.map.viewCalibration.zoom,
+                pitch: settings.map.viewCalibration.pitch,
                 bearing: 360 - header.rotation,
                 orthographic: true,
             },
