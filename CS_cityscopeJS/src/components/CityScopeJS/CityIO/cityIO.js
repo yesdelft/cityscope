@@ -83,10 +83,10 @@ class CityIO extends Component {
             this.props.setLoadingState(true);
 
             // get scenario indices
-            getScenarioIndices(
-                this.props.tableName,
-                this.props.setScenarioNames
-            );
+            // getScenarioIndices(
+            //     this.props.tableName,
+            //     this.props.setScenarioNames
+            // );
 
             // new data in table, get all modules
             // that are listed in settings
