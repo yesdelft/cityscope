@@ -15,9 +15,14 @@
             "temptiles"
         ]
     },
-
+    
     "menu": {
         "toggles": {
+            "REMOTE":{
+                "displayName": "Remote Ui",
+                "showOnInit": true,
+                "requireModule": false
+            },
             "GRID": {
                 "displayName": "Interactive Grid",
                 "showOnInit": false,
@@ -43,16 +48,6 @@
                 "showOnInit": false,
                 "requireModule": false
             },
-            "Bounds":{
-                "displayName": "Display Extent Table projection adjustment",
-                "showOnInit": false,
-                "requireModule": false
-            },
-            "REMOTE":{
-                "displayName": "Remote Ui",
-                "showOnInit": true,
-                "requireModule": false
-            },
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
                 "showOnInit": false,
@@ -62,6 +57,16 @@
                 "displayName": "Urban Indicators",
                 "showOnInit": false,
                 "requireModule": "indicators"
+            },
+            "Bounds":{
+                "displayName": "Display Extent Table projection adjustment",
+                "showOnInit": false,
+                "requireModule": false
+            },
+            "calibrationGridLayer":{
+                "displayName": "Guideline Grid",
+                "showOnInit": false,
+                "requireModule": false
             },
             "ROTATE": {
                 "displayName": "Rotate Camera",
@@ -75,11 +80,6 @@
             },
             "KEYSTONE": {
                 "displayName": "Projection Mapping",
-                "showOnInit": false,
-                "requireModule": false
-            },
-            "calibrationGridLayer":{
-                "displayName": "Guideline Grid",
                 "showOnInit": false,
                 "requireModule": false
             }
