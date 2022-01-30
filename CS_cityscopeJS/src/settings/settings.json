@@ -80,7 +80,7 @@
             },
             "calibrationGridLayer":{
                 "displayName": "Guideline Grid",
-                "showOnInit": true,
+                "showOnInit": false,
                 "requireModule": false
             }
         }
