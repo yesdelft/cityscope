@@ -16,7 +16,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer} from '@deck.gl/layers';
+import {SolidPolygonLayer, BitmapLayer, GridCellLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -27,7 +27,7 @@ import axios from "axios";
 // data from externally added json files
 import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
-import grid_200_data from "../../../data/grid200.geojson";
+import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 
 class Map extends Component {
@@ -695,25 +695,59 @@ class Map extends Component {
         }
 
         if ((controlRemotely && remote.toggles.includes("calibrationGridLayer")) || (!controlRemotely && menu.includes("calibrationGridLayer")) ) 
-        {
+        {   
+            // var initLat= settings.map.viewCalibration.latitude;
+            // var initLon= settings.map.viewCalibration.longitude;
+            // var gridCoord={};
+            // var cellSize= 200;
+            // var tempLat, tempLon;
+            // for(int i=initLat, )
+            // {
+
+            // }
+                
+            console.log("inside calibGridLayer")
             layers.push(
+
+                // new GridCellLayer({
+                // /**
+                //  * Data format:
+                //  * [
+                //  *   {centroid: [-122.4, 37.7], value: 100},
+                //  *   ...
+                //  * ]
+                //  */
+                //     id: 'grid-cell-layer',
+                //     data: grid_200_data,
+                //     pickable: true,
+                //     extruded: false,
+                //     cellSize: 200,
+                //     elevationScale: 1,
+                //     getPosition: [4.45313, 51.89948],//d => d.geometry.coordinates,
+                //     getFillColor: [48, 128, 255, 255]
+                //     // getElevation: d => d.value
+                // })
+
+                // attempt with  GeoJSON layer
                 new GeoJsonLayer({
                     id: 'geojson-layer',
                     data: grid_200_data,
-                    pickable: true,
+                    pickable: false,
                     stroked: false,
                     filled: false,
-                    extruded: true,
+                    extruded: false,
                     wireframe:true,
                     pointType: 'circle',
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
-                    // getFillColor: [160, 160, 180, 200],
+                    getFillColor: [160, 160, 180, 200],
                     // getLineColor: d => colorToRGBArray(d.properties.color),
                     getPointRadius: 10,
-                    getLineWidth: 1,
-                    getElevation: 30
+                    getLineWidth: 5,
+                    getElevation: 10
                   })
+
+                // // attempt with  screengrid layer
                 // new ScreenGridLayer(
                 //     {
                 //     id: 'screen-grid-layer',
