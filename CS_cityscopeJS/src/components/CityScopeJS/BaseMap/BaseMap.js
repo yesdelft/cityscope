@@ -40,7 +40,7 @@ class Map extends Component {
             draggingWhileEditing: false,
             selectedCellsState: null,
             pickingRadius: 40,
-            viewState: settings.map.initialViewState,
+            viewState: settings.map.viewCalibration,
             controlRemotely: true,
             remoteMenu: {toggles: []}
         };
@@ -270,7 +270,7 @@ class Map extends Component {
                 // latitude: header.latitude,
                 zoom: settings.map.viewCalibration.zoom,
                 pitch: settings.map.viewCalibration.pitch,
-                bearing: 360 - 0,// header.rotation,
+                bearing: settings.map.viewCalibration.rotate,//360 - 0,// header.rotation,
                 orthographic: true,
             },
         });

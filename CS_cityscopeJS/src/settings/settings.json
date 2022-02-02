@@ -116,10 +116,11 @@
             "bearing": 0
         },
         "viewCalibration": {
-            "zoom": 15,
+            "zoom": 13.895,
             "pitch": 0,
-            "longitude":  4.489405,
-            "latitude": 51.91314
+            "rotate": 0.9,
+            "longitude":  4.4901,
+            "latitude": 51.91456
         }
     }
 }
