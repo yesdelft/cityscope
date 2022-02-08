@@ -16,7 +16,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer, GridCellLayer} from '@deck.gl/layers';
+import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -601,6 +601,34 @@ class Map extends Component {
         }
 
 
+        layers.push(new ScatterplotLayer({
+            id: 'scatterplot-layer',
+            data:[
+                
+            {
+                "incident_id": 92959,
+                "date": "1/4/2014",
+                "n_killed": 0,
+                "n_injured": 1,
+                "coordinates": [4.4901, 51.91456],
+                "location": 0,
+                "notes": "Victim reported being sexually assaulted at gunpoint. At large.",
+                "categories": 0
+            }
+            ],
+            pickable: true,
+            opacity: 0.8,
+            stroked: true,
+            filled: true,
+            radiusScale: 6,
+            radiusMinPixels: 1,
+            radiusMaxPixels: 100,
+            lineWidthMinPixels: 1,
+            getPosition: d => d.coordinates,
+            // getRadius: d => Math.sqrt(d.exits),
+            getFillColor: d => [255, 140, 0],
+            getLineColor: d => [0, 0, 0]        
+        }));
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
