@@ -25,7 +25,6 @@ import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 import axios from "axios";
 
 // data from externally added json files
-import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
@@ -330,7 +329,6 @@ class Map extends Component {
 
         // if (this.state.animateABM) {
         let controlRemotely = this.state.controlRemotely
-        let remote = this.state.remoteMenu;
 
         if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
             const time = this.props.sliders.time[1];
@@ -707,14 +705,6 @@ class Map extends Component {
              );
         }   
 
-
-
-        // if (menu.includes("REMOTE")) {
-        //     this.setState({
-        //         controlRemotely: true,
-        //     })
-        // }
-        // console.log("menu//:", this.props);
         return layers;
     }
 
