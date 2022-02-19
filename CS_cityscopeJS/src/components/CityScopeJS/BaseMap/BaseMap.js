@@ -46,15 +46,24 @@ class Map extends Component {
             testData:[
                 
                 {
-                    "incident_id": 92959,
+                    "name": 1,
                     "date": "1/4/2014",
-                    "n_killed": 0,
-                    "n_injured": 1,
+                    "speed": 0,
+                    "heading": 1,
                     "coordinates": [4.4905, 51.91456],
-                    "location": 0,
-                    "notes": "Victim reported being sexually assaulted at gunpoint. At large.",
-                    "categories": 0
+                    "size": 5
+                },
+                {
+                    "name": 2,
+                    "coordinates": [4.4805, 51.90556],
+                    "size": 5
+                },
+                {
+                    "name": 3,
+                    "coordinates": [4.5055, 51.91656],
+                    "size": 8
                 }
+                
                 ]
         };
         this.animationFrame = null;
@@ -339,13 +348,17 @@ class Map extends Component {
         // console.log(elapsedSeconds)
         let step = elapsedSeconds % 5;
         // console.log(step)
-        let newLatitude = 4.4900 + step / 10000;
         let items = [...this.state.testData];
-        let item = {
-            ...items[0],
-            coordinates: [newLatitude, 51.91456]
+        for (var i=0; i<items.length; i++) {
+            let newLatitude = items[i].coordinates[0] + (Math.random() - 0.5) / 10000;
+            let newLongitude = items[i].coordinates[1] +  (Math.random() - 0.5) / 10000;
+
+            let item = {
+                ...items[i],
+                coordinates: [newLatitude, newLongitude]
+            }
+            items[i] = item
         }
-        items[0] = item
         this.setState({testData: items})
 
         // if (this.state.animateABM) {
@@ -640,9 +653,12 @@ class Map extends Component {
             radiusMaxPixels: 100,
             lineWidthMinPixels: 1,
             getPosition: d => d.coordinates,
-            // getRadius: d => Math.sqrt(d.exits),
+            getRadius: d => d.size,
             getFillColor: d => [255, 140, 0],
-            getLineColor: d => [0, 0, 0]        
+            getLineColor: d => [0, 0, 0]
+            // transitions: {
+            //     getPosition: 0,
+            // }
         }));
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
