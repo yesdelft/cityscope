@@ -42,7 +42,20 @@ class Map extends Component {
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
-            remoteMenu: {toggles: []}
+            remoteMenu: {toggles: []},
+            testData:[
+                
+                {
+                    "incident_id": 92959,
+                    "date": "1/4/2014",
+                    "n_killed": 0,
+                    "n_injured": 1,
+                    "coordinates": [4.4905, 51.91456],
+                    "location": 0,
+                    "notes": "Victim reported being sexually assaulted at gunpoint. At large.",
+                    "categories": 0
+                }
+                ]
         };
         this.animationFrame = null;
     }
@@ -320,6 +333,20 @@ class Map extends Component {
                 },
             });
         }
+
+        let date = new Date();
+        let elapsedSeconds = date.getSeconds();
+        // console.log(elapsedSeconds)
+        let step = elapsedSeconds % 5;
+        // console.log(step)
+        let newLatitude = 4.4900 + step / 10000;
+        let items = [...this.state.testData];
+        let item = {
+            ...items[0],
+            coordinates: [newLatitude, 51.91456]
+        }
+        items[0] = item
+        this.setState({testData: items})
 
         // if (this.state.animateABM) {
         let controlRemotely = this.state.controlRemotely
@@ -603,19 +630,7 @@ class Map extends Component {
 
         layers.push(new ScatterplotLayer({
             id: 'scatterplot-layer',
-            data:[
-                
-            {
-                "incident_id": 92959,
-                "date": "1/4/2014",
-                "n_killed": 0,
-                "n_injured": 1,
-                "coordinates": [4.4901, 51.91456],
-                "location": 0,
-                "notes": "Victim reported being sexually assaulted at gunpoint. At large.",
-                "categories": 0
-            }
-            ],
+            data: this.state.testData,
             pickable: true,
             opacity: 0.8,
             stroked: true,
