@@ -198,3 +198,18 @@ User input layers can be either vector layers or raster layers. The following in
     ``` 
     Note that `showOnInit` determines if the layer is switched on when the project is loaded.
 
+## Caliberating the map projection
+1. All changes to be made for the purpose of map caliberation is in the `settings.json` file.
+1. In the settings file, scroll to the position which defines the key of viewCalibration, this is where the initial latitude, longitude, rotation, pitch and zoom can be set once and for all.
+
+
+The following table elucidates how changing the values affects the display on the table, with the meanings `↑: increase` and `↓: decrease`
+
+| Direction                   	| Change in value 	|
+|-----------------------------	|-----------------	|
+| Rotate counter-clockwise    	| ↑ rotation      	|
+| Rotate clockwise            	| ↓ rotation      	|
+| Shift map left (westwards)  	| ↑ Longitude     	|
+| Shift map right (eastwards) 	| ↓ Longitude     	|
+| Shift map up (northwards)   	| ↓ Latitude      	|
+| Shift map down (southwards) 	| ↑ Latitude      	|

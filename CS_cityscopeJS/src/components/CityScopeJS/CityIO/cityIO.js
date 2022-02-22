@@ -9,12 +9,14 @@ import {
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
 import { getScenarioIndices } from "./utils";
+import cityIOFakeMeta from "../../../settings/serverDecouple.json"; //fake metadata
+
 
 class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oldHashs: {},
+            oldHashs: {"id":12},
             cityIOmodulesData: {},
         };
         this.cityioURL = null;
@@ -54,14 +56,16 @@ class CityIO extends Component {
      * returns only the hasees from API
      */
     getCityIOHash = (URL) => {
-        axios
-            .get(URL)
-            .then((response) => {
-                this.handleCityIOHashes(response.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        this.handleCityIOHashes(cityIOFakeMeta);
+
+        // axios
+        //     .get(URL)
+        //     .then((response) => {
+        //         this.handleCityIOHashes(response.data);
+        //     })
+        //     .catch((e) => {
+        //         console.log(e);
+        //     });
     };
 
     /**
@@ -71,7 +75,7 @@ class CityIO extends Component {
      */
     handleCityIOHashes = (result) => {
         // if master hash ID has changed (cityIO table state)
-        if (result.id !== this.state.oldHashs.id) {
+        if (result.id !== this.state.oldHashs.id) {  
             // reset the cityIOmodulesStatus
             this.setState({ cityIOmodulesStatus: {} });
 
@@ -79,34 +83,34 @@ class CityIO extends Component {
             this.props.setLoadingState(true);
 
             // get scenario indices
-            getScenarioIndices(
-                this.props.tableName,
-                this.props.setScenarioNames
-            );
+            // getScenarioIndices(
+            //     this.props.tableName,
+            //     this.props.setScenarioNames
+            // );
 
             // new data in table, get all modules
             // that are listed in settings
-            settings.cityIO.cityIOmodules.forEach((module) => {
-                // only update modules that have new data
-                if (result.hashes[module] !== this.state.oldHashs[module]) {
-                    // set this module as not ready
-                    this.setNestedState("cityIOmodulesStatus", module, false);
-                    // get the module data from cityIO
-                    this.getCityIOmoduleData(
-                        module,
-                        this.cityioURL + "/" + module
-                    );
-                    // update this new module hash in state
-                    this.setNestedState(
-                        "oldHashs",
-                        module,
-                        result.hashes[module]
-                    );
-                } else {
-                    // update module name with ok
-                    this.setNestedState("cityIOmodulesStatus", module, true);
-                }
-            });
+            // settings.cityIO.cityIOmodules.forEach((module) => {
+            //     // only update modules that have new data
+            //     if (result.hashes[module] !== this.state.oldHashs[module]) {
+            //         // set this module as not ready
+            //         this.setNestedState("cityIOmodulesStatus", module, false);
+            //         // get the module data from cityIO
+            //         this.getCityIOmoduleData(
+            //             module,
+            //             this.cityioURL + "/" + module
+            //         );
+            //         // update this new module hash in state
+            //         this.setNestedState(
+            //             "oldHashs",
+            //             module,
+            //             result.hashes[module]
+            //         );
+            //     } else {
+            //         // update module name with ok
+            //         this.setNestedState("cityIOmodulesStatus", module, true);
+            //     }
+            // });
             this.checkDoneCityIO();
             // finally, put to state the hashes master id
             this.setNestedState("oldHashs", "id", result.id);
