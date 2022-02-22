@@ -1,5 +1,9 @@
 import axios from "axios";
 
+import fakeGeoGrid from "../../../data/yourtest.json";
+import fakeGeoGridGeometry from "../../../data/yourtestgeo.json";
+
+
 /**
  * conver rgb to hex
  */
@@ -40,7 +44,8 @@ export const testHex = (hexString) => {
  */
 export const _proccessGridData = (cityioData) => {
     // get the static grid
-    const GEOGRID = cityioData.GEOGRID;
+    // const GEOGRID = cityioData.GEOGRID;
+    const GEOGRID = fakeGeoGridGeometry;
     // if GEOGRRIDDATA exist and is the same length as our grid
     if (
         cityioData.GEOGRIDDATA &&

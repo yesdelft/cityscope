@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import BaseMap from "./BaseMap";
 import { connect } from "react-redux";
 import { ProjectionMapping } from "../ProjectionMapping/ProjectionMapping";
+import settings from "../../../settings/settings.json";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
@@ -11,11 +12,7 @@ class MapContainer extends Component {
     render() {
         return (
             <div
-                style={{
-                    height: "100vh",
-                    width: "100vw",
-                    overflow: "hidden",
-                }}
+                style={settings.map.main_map_display}
             >
                 <ProjectionMapping
                     style={{
