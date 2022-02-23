@@ -16,7 +16,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer} from '@deck.gl/layers';
+import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -680,6 +680,21 @@ class Map extends Component {
             getAlignmentBaseline: 'top'
           }));
 
+          layers.push(new IconLayer({
+            id: 'icon-layer',
+            data: this.state.testData,
+            pickable: true,
+            // iconAtlas and iconMapping are required
+            // getIcon: return a string
+            iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+            iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
+            getIcon: d => 'ship',
+        
+            sizeScale: 15,
+            getPosition: d => d.coordinates,
+            getSize: d => d.size,
+            // getColor: d => [Math.sqrt(d.exits), 140, 0]
+          }));
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
