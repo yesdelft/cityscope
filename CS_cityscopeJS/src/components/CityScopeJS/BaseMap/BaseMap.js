@@ -668,6 +668,13 @@ class Map extends Component {
             getPosition: d => d.coordinates,
             getText: d => d.name,
             getSize: d => d.size * 5,
+            getPixelOffset: [5, 5],
+            getColor: [255, 255, 255],
+            getBorderColor: [0, 0, 0],
+            getBorderWidth: 3,
+            outlineWidth: 10,
+            // outlineColor: [0, 0, 0],
+            background: true,
             getAngle: 0,
             getTextAnchor: 'start',
             getAlignmentBaseline: 'top'
