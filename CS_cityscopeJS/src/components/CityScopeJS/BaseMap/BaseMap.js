@@ -29,6 +29,7 @@ import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
+import ship_image from "../../../data/ship.png"; //fake ABM data
 
 class Map extends Component {
     constructor(props) {
@@ -686,11 +687,18 @@ class Map extends Component {
             pickable: true,
             // iconAtlas and iconMapping are required
             // getIcon: return a string
-            iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
+            // iconAtlas: 'https://www.kindpng.com/picc/m/774-7748130_cargo-ship-icon-png-cargo-ship-icon-transparent.png',
+            // iconAtlas: 'https://toppng.com/uploads/preview/home-home-sea-container-ship-icon-11563195830cq8dtw2n3l.png',
+            // iconAtlas: '',
+            iconAtlas: ship_image,
+            // iconAtlas: './././data/cargo-ship.png',
+            // iconAtlas: 'https://www.mcicon.com/wp-content/uploads/2021/01/Transport_Ship_1-copy-11.jpg',
+            // iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+            iconMapping:  {ship: {x: 0, y: 100, width: 980, height: 608, mask: false}},
+            // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
             getIcon: d => 'ship',
         
-            sizeScale: 15,
+            sizeScale: 10,
             getPosition: d => d.coordinates,
             getSize: d => d.size,
             // getColor: d => [Math.sqrt(d.exits), 140, 0]
