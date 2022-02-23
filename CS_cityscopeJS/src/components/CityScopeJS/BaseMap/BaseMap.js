@@ -16,7 +16,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer} from '@deck.gl/layers';
+import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -46,7 +46,7 @@ class Map extends Component {
             testData:[
                 
                 {
-                    "name": 1,
+                    "name": "SS Enterprise",
                     "date": "1/4/2014",
                     "speed": 0,
                     "heading": 1,
@@ -54,12 +54,12 @@ class Map extends Component {
                     "size": 5
                 },
                 {
-                    "name": 2,
+                    "name": "Titanic",
                     "coordinates": [4.4805, 51.90556],
                     "size": 5
                 },
                 {
-                    "name": 3,
+                    "name": "Ferrari",
                     "coordinates": [4.5055, 51.91656],
                     "size": 8
                 }
@@ -660,6 +660,19 @@ class Map extends Component {
             //     getPosition: 0,
             // }
         }));
+
+        layers.push(new TextLayer({
+            id: 'text-layer',
+            data: this.state.testData,
+            pickable: true,
+            getPosition: d => d.coordinates,
+            getText: d => d.name,
+            getSize: d => d.size * 5,
+            getAngle: 0,
+            getTextAnchor: 'start',
+            getAlignmentBaseline: 'top'
+          }));
+
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
