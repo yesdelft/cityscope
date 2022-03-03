@@ -50,7 +50,7 @@ class Map extends Component {
                     "name": "SS Enterprise",
                     "date": "1/4/2014",
                     "speed": 0,
-                    "heading": 1,
+                    "heading": 180,
                     "coordinates": [4.4905, 51.91456],
                     "route": [[4.4905, 51.91456],[4.4915, 51.91456]],
                     "size": 5
@@ -357,11 +357,22 @@ class Map extends Component {
             
             newLatitude = items[i].route[step][0];
             newLongitude = items[i].route[step][1];
-
+            let previousStep = 0;
+            if (step > 0) {
+                previousStep = step - 1
+            }
+            let previousLat = items[i].route[previousStep][0];
+            let previousLon = items[i].route[previousStep][1];
+            let deltaLon = newLongitude - previousLon;
+            let x = Math.cos(newLatitude) * Math.sin(deltaLon);
+            let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
+            let newHeading = Math.atan2(x, y) * (180 / Math.PI);
+console.log(newHeading);
 
             let item = {
                 ...items[i],
-                coordinates: [newLatitude, newLongitude]
+                coordinates: [newLatitude, newLongitude],
+                heading: newHeading
             }
             items[i] = item
         }
@@ -681,7 +692,7 @@ class Map extends Component {
             outlineWidth: 10,
             // outlineColor: [0, 0, 0],
             background: true,
-            getAngle: 0,
+            getAngle: d => d.heading,
             getTextAnchor: 'start',
             getAlignmentBaseline: 'top',
             transitions: {
@@ -707,7 +718,7 @@ class Map extends Component {
             iconMapping:  {ship: {x: 0, y: 100, width: 980, height: 608, mask: false}},
             // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
             getIcon: d => 'ship',
-        
+            getAngle: d => d.heading,
             sizeScale: 10,
             getPosition: d => d.coordinates,
             getSize: d => d.size,
