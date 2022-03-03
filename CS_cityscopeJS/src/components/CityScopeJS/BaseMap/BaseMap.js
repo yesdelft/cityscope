@@ -683,7 +683,12 @@ class Map extends Component {
             background: true,
             getAngle: 0,
             getTextAnchor: 'start',
-            getAlignmentBaseline: 'top'
+            getAlignmentBaseline: 'top',
+            transitions: {
+                getPosition: {
+                    duration: 1000
+                }
+            }
           }));
 
           layers.push(new IconLayer({
@@ -707,6 +712,11 @@ class Map extends Component {
             getPosition: d => d.coordinates,
             getSize: d => d.size,
             // getColor: d => [Math.sqrt(d.exits), 140, 0]
+            transitions: {
+                getPosition: {
+                    duration: 1000
+                }
+            }
           }));
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
