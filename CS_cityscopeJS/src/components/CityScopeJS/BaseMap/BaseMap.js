@@ -29,7 +29,8 @@ import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
-import ship_image from "../../../data/ship.png"; //fake ABM data
+import ship_image from "../../../data/ship.png"; 
+import ships from "../../../data/ships.json"; 
 
 class Map extends Component {
     constructor(props) {
@@ -44,29 +45,7 @@ class Map extends Component {
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
             remoteMenu: {toggles: []},
-            testData:[
-                
-                {
-                    "name": "SS Enterprise",
-                    "date": "1/4/2014",
-                    "speed": 0,
-                    "heading": 180,
-                    "coordinates": [4.4905, 51.91456],
-                    "route": [[4.4905, 51.91456],[4.4915, 51.91456]],
-                    "size": 5
-                }
-                // {
-                //     "name": "Titanic",
-                //     "coordinates": [4.4805, 51.90556],
-                //     "size": 5
-                // },
-                // {
-                //     "name": "Ferrari",
-                //     "coordinates": [4.5055, 51.91656],
-                //     "size": 8
-                // }
-                
-                ]
+            testData: ships
         };
         this.animationFrame = null;
     }
@@ -351,19 +330,25 @@ class Map extends Component {
         // console.log(step)
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
+            if (i>0) {continue;            }
             let newLatitude = items[i].coordinates[0] + (Math.random() - 0.5) / 10000;
             let newLongitude = items[i].coordinates[1] +  (Math.random() - 0.5) / 10000;
             let step = elapsedSeconds % items[i].route.length;
             
-            newLatitude = items[i].route[step][0];
-            newLongitude = items[i].route[step][1];
+            let latitude = items[i].route[step][0];
+            let longitude = items[i].route[step][1];
+            
+            newLatitude = items[i].route[step][0] * Math.PI / 180;
+            newLongitude = items[i].route[step][1] * Math.PI / 180;
             let previousStep = 0;
             if (step > 0) {
                 previousStep = step - 1
             }
-            let previousLat = items[i].route[previousStep][0];
-            let previousLon = items[i].route[previousStep][1];
+            let previousLat = items[i].route[previousStep][0] * Math.PI / 180;
+            let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
+            
             let deltaLon = newLongitude - previousLon;
+            
             let x = Math.cos(newLatitude) * Math.sin(deltaLon);
             let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
             let newHeading = Math.atan2(x, y) * (180 / Math.PI);
@@ -371,7 +356,7 @@ console.log(newHeading);
 
             let item = {
                 ...items[i],
-                coordinates: [newLatitude, newLongitude],
+                coordinates: [latitude, longitude],
                 heading: newHeading
             }
             items[i] = item

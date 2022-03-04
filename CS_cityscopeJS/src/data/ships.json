@@ -1,0 +1,21 @@
+[
+    {
+        "name": "SS Enterprise",
+        "date": "1/4/2014",
+        "speed": 0,
+        "heading": 180,
+        "coordinates": [4.4905, 51.91456],
+        "route": [[4.4905, 51.91456],[4.4915, 51.91457]],
+        "size": 5
+    },
+    {
+        "name": "Titanic",
+        "coordinates": [4.4805, 51.90556],
+        "size": 5
+    },
+    {
+        "name": "Ferrari",
+        "coordinates": [4.5055, 51.91656],
+        "size": 8
+    }    
+]
