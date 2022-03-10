@@ -48,6 +48,7 @@ class Map extends Component {
             testData: ships
         };
         this.animationFrame = null;
+        // this.startTime = new Date();
     }
 
     componentWillUnmount() {
@@ -325,16 +326,17 @@ class Map extends Component {
         }
 
         let date = new Date();
-        let elapsedSeconds = date.getSeconds();
-        // console.log(elapsedSeconds)
-        // console.log(step)
+        let startDate = new Date(2011,7,5,2,1,1);
+        let elapsedSeconds = date - startDate;
+        elapsedSeconds = Math.floor(elapsedSeconds / 1000);
+        // let elapsedSeconds = date.getSeconds();
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
-            if (i>0) {continue;            }
+            // if (i!=0) {continue;            }
             let newLatitude = items[i].coordinates[0] + (Math.random() - 0.5) / 10000;
             let newLongitude = items[i].coordinates[1] +  (Math.random() - 0.5) / 10000;
             let step = elapsedSeconds % items[i].route.length;
-            
+            console.log(step,items[i].route.length);
             let latitude = items[i].route[step][0];
             let longitude = items[i].route[step][1];
             
@@ -357,7 +359,7 @@ console.log(newHeading);
             let item = {
                 ...items[i],
                 coordinates: [latitude, longitude],
-                heading: newHeading
+                heading:0// newHeading
             }
             items[i] = item
         }
