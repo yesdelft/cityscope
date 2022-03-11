@@ -20,7 +20,7 @@
         "toggles": {
             "REMOTE":{
                 "displayName": "Remote Ui",
-                "showOnInit": true,
+                "showOnInit": false,
                 "requireModule": false
             },
             "GRID": {

@@ -328,7 +328,7 @@ class Map extends Component {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
         let elapsedSeconds = date - startDate;
-        elapsedSeconds = Math.floor(elapsedSeconds / 100);
+        elapsedSeconds = Math.floor(elapsedSeconds / 1000);
         // let elapsedSeconds = date.getSeconds();
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
@@ -381,8 +381,8 @@ console.log(newHeading);
                 ...items[i],
                 coordinates: [latitude, longitude],
                 heading: newHeading,
-                icon: newIcon,
-                name: newHeading.toString()
+                icon: newIcon
+                // name: newHeading.toString()
             }
             items[i] = item
         }
@@ -672,7 +672,7 @@ console.log(newHeading);
             id: 'scatterplot-layer',
             data: this.state.testData,
             pickable: true,
-            opacity: 0.01,
+            opacity: 0.005,
             stroked: true,
             filled: true,
             radiusScale: 6,
@@ -698,7 +698,7 @@ console.log(newHeading);
             getPixelOffset: [15, 15],
             getColor: [255, 255, 255],
             getBorderColor: [0, 0, 0],
-            getBorderWidth: 3,
+            getBorderWidth: 6,
             outlineWidth: 10,
             // outlineColor: [0, 0, 0],
             background: true,
@@ -707,10 +707,10 @@ console.log(newHeading);
             getAlignmentBaseline: 'top',
             transitions: {
                 getPosition: {
-                    duration: 1000
+                    duration: 5000
                 },
                 getAngle: {
-                    duration: 1000
+                    duration: 5000
                 }
             }
           }));
@@ -728,18 +728,19 @@ console.log(newHeading);
             // iconAtlas: './././data/cargo-ship.png',
             // iconAtlas: 'https://www.mcicon.com/wp-content/uploads/2021/01/Transport_Ship_1-copy-11.jpg',
             // iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: false}, 
-            shipBackward: {x: 980, y: 608, width: 980, height: 608, mask: false}},
+            iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: true}, 
+            shipBackward: {x: 980, y: 100, width: 980, height: 608, mask: true}},
             // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
             getIcon: d => d.icon,
             getAngle: d => d.heading,
             sizeScale: 10,
             getPosition: d => d.coordinates,
             getSize: d => d.size,
-            // getColor: d => [Math.sqrt(d.exits), 140, 0]
+            // getColor: d => [0,255,0],
+            getColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
             transitions: {
                 getPosition: {
-                    duration: 1000
+                    duration: 4000
                 },
                 getAngle: {
                     duration: 1000
