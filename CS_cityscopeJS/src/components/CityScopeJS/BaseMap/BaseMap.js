@@ -336,6 +336,10 @@ class Map extends Component {
             let newLatitude = items[i].coordinates[0] + (Math.random() - 0.5) / 10000;
             let newLongitude = items[i].coordinates[1] +  (Math.random() - 0.5) / 10000;
             let step = elapsedSeconds % items[i].route.length;
+            let pingOrPong = Math.floor(elapsedSeconds / items[i].route.length) % 2;
+            if (pingOrPong == 1) {
+                step = items[i].route.length - step - 1;
+            }
             console.log(step,items[i].route.length);
             let latitude = items[i].route[step][0];
             let longitude = items[i].route[step][1];
@@ -343,8 +347,13 @@ class Map extends Component {
             newLatitude = items[i].route[step][0] * Math.PI / 180;
             newLongitude = items[i].route[step][1] * Math.PI / 180;
             let previousStep = 0;
-            if (step > 0) {
+            if (step > 0 && pingOrPong == 0) {
                 previousStep = step - 1
+            }else if (pingOrPong == 1) {
+                previousStep = items[i].route.length - 1;
+                if (step != previousStep) {
+                    previousStep = step + 1;
+                }
             }
             let previousLat = items[i].route[previousStep][0] * Math.PI / 180;
             let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
