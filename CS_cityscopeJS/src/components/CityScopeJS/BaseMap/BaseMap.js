@@ -29,7 +29,7 @@ import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
-import ship_image from "../../../data/ship.png"; 
+import ship_image from "../../../data/shipAtlas.png"; 
 import ships from "../../../data/ships.json"; 
 
 class Map extends Component {
@@ -328,7 +328,7 @@ class Map extends Component {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
         let elapsedSeconds = date - startDate;
-        elapsedSeconds = Math.floor(elapsedSeconds / 1000);
+        elapsedSeconds = Math.floor(elapsedSeconds / 100);
         // let elapsedSeconds = date.getSeconds();
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
@@ -350,16 +350,30 @@ class Map extends Component {
             let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
             
             let deltaLon = newLongitude - previousLon;
+            let deltaLat = newLatitude - previousLat;
             
             let x = Math.cos(newLatitude) * Math.sin(deltaLon);
             let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
             let newHeading = Math.atan2(x, y) * (180 / Math.PI);
+            // newHeading += 180;
 console.log(newHeading);
+            // let newIcon = "shipBackward"
 
+            let newIcon = "shipForward";
+            if (deltaLat < 0) {
+                newIcon = "shipBackward";
+                newHeading += 180;
+            }
+            // if (newHeading > 180 && newHeading < 270) {
+            //     newIcon = "shipForward"
+
+            // }
             let item = {
                 ...items[i],
                 coordinates: [latitude, longitude],
-                heading:0// newHeading
+                heading: newHeading,
+                icon: newIcon,
+                name: newHeading.toString()
             }
             items[i] = item
         }
@@ -649,7 +663,7 @@ console.log(newHeading);
             id: 'scatterplot-layer',
             data: this.state.testData,
             pickable: true,
-            opacity: 0.8,
+            opacity: 0.01,
             stroked: true,
             filled: true,
             radiusScale: 6,
@@ -672,18 +686,21 @@ console.log(newHeading);
             getPosition: d => d.coordinates,
             getText: d => d.name,
             getSize: d => d.size * 5,
-            getPixelOffset: [5, 5],
+            getPixelOffset: [15, 15],
             getColor: [255, 255, 255],
             getBorderColor: [0, 0, 0],
             getBorderWidth: 3,
             outlineWidth: 10,
             // outlineColor: [0, 0, 0],
             background: true,
-            getAngle: d => d.heading,
+            getAngle: d => 0,//d.heading,
             getTextAnchor: 'start',
             getAlignmentBaseline: 'top',
             transitions: {
                 getPosition: {
+                    duration: 1000
+                },
+                getAngle: {
                     duration: 1000
                 }
             }
@@ -702,9 +719,10 @@ console.log(newHeading);
             // iconAtlas: './././data/cargo-ship.png',
             // iconAtlas: 'https://www.mcicon.com/wp-content/uploads/2021/01/Transport_Ship_1-copy-11.jpg',
             // iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping:  {ship: {x: 0, y: 100, width: 980, height: 608, mask: false}},
+            iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: false}, 
+            shipBackward: {x: 980, y: 608, width: 980, height: 608, mask: false}},
             // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
-            getIcon: d => 'ship',
+            getIcon: d => d.icon,
             getAngle: d => d.heading,
             sizeScale: 10,
             getPosition: d => d.coordinates,
@@ -712,6 +730,9 @@ console.log(newHeading);
             // getColor: d => [Math.sqrt(d.exits), 140, 0]
             transitions: {
                 getPosition: {
+                    duration: 1000
+                },
+                getAngle: {
                     duration: 1000
                 }
             }
