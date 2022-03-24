@@ -29,7 +29,8 @@ import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
-import ship_image from "../../../data/shipAtlas.png"; 
+// import ship_image from "../../../data/shipAtlas.png"; 
+import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
 
 class Map extends Component {
@@ -370,9 +371,10 @@ console.log(newHeading);
 
             let newIcon = "shipForward";
             if (deltaLat < 0) {
-                newIcon = "shipBackward";
-                newHeading += 180;
+                // newIcon = "shipBackward";
+                // newHeading += 180;
             }
+            newHeading -= 90;
             // if (newHeading > 180 && newHeading < 270) {
             //     newIcon = "shipForward"
 
@@ -694,8 +696,8 @@ console.log(newHeading);
             pickable: true,
             getPosition: d => d.coordinates,
             getText: d => d.name,
-            getSize: d => d.size * 5,
-            getPixelOffset: [15, 15],
+            getSize: d => 16,//d.size * 5,
+            getPixelOffset: [10, 10],
             getColor: [255, 255, 255],
             getBorderColor: [0, 0, 0],
             getBorderWidth: 6,
@@ -728,14 +730,17 @@ console.log(newHeading);
             // iconAtlas: './././data/cargo-ship.png',
             // iconAtlas: 'https://www.mcicon.com/wp-content/uploads/2021/01/Transport_Ship_1-copy-11.jpg',
             // iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: true}, 
-            shipBackward: {x: 980, y: 100, width: 980, height: 608, mask: true}},
+         
+            iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
+            // iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: true}, 
+            // shipBackward: {x: 980, y: 100, width: 980, height: 608, mask: true}},
+
             // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
             getIcon: d => d.icon,
             getAngle: d => d.heading,
             sizeScale: 10,
             getPosition: d => d.coordinates,
-            getSize: d => d.size,
+            getSize: d => 3,//d.size,
             // getColor: d => [0,255,0],
             getColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
             transitions: {
