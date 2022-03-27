@@ -311,21 +311,7 @@ class Map extends Component {
             date.getSeconds()
         );
     };
-
-    _animate() {
-        if (this.state.animateCamera) {
-            let bearing = this.state.viewState.bearing
-                ? this.state.viewState.bearing
-                : 0;
-            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
-            this.setState({
-                viewState: {
-                    ...this.state.viewState,
-                    bearing: bearing,
-                },
-            });
-        }
-
+    _updateShipMovement = () => {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
         let elapsedSeconds = date - startDate;
@@ -333,20 +319,16 @@ class Map extends Component {
         // let elapsedSeconds = date.getSeconds();
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
-            // if (i!=0) {continue;            }
-            let newLatitude = items[i].coordinates[0] + (Math.random() - 0.5) / 10000;
-            let newLongitude = items[i].coordinates[1] +  (Math.random() - 0.5) / 10000;
             let step = elapsedSeconds % items[i].route.length;
             let pingOrPong = Math.floor(elapsedSeconds / items[i].route.length) % 2;
             if (pingOrPong == 1) {
                 step = items[i].route.length - step - 1;
             }
-            console.log(step,items[i].route.length);
             let latitude = items[i].route[step][0];
             let longitude = items[i].route[step][1];
             
-            newLatitude = items[i].route[step][0] * Math.PI / 180;
-            newLongitude = items[i].route[step][1] * Math.PI / 180;
+            let newLatitude = items[i].route[step][0] * Math.PI / 180;
+            let newLongitude = items[i].route[step][1] * Math.PI / 180;
             let previousStep = 0;
             if (step > 0 && pingOrPong == 0) {
                 previousStep = step - 1
@@ -364,21 +346,9 @@ class Map extends Component {
             
             let x = Math.cos(newLatitude) * Math.sin(deltaLon);
             let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
-            let newHeading = Math.atan2(x, y) * (180 / Math.PI);
-            // newHeading += 180;
-console.log(newHeading);
-            // let newIcon = "shipBackward"
+            let newHeading = Math.atan2(x, y) * (180 / Math.PI) - 90;
 
             let newIcon = "shipForward";
-            if (deltaLat < 0) {
-                // newIcon = "shipBackward";
-                // newHeading += 180;
-            }
-            newHeading -= 90;
-            // if (newHeading > 180 && newHeading < 270) {
-            //     newIcon = "shipForward"
-
-            // }
             let item = {
                 ...items[i],
                 coordinates: [latitude, longitude],
@@ -389,6 +359,23 @@ console.log(newHeading);
             items[i] = item
         }
         this.setState({testData: items})
+    };
+
+    _animate() {
+        if (this.state.animateCamera) {
+            let bearing = this.state.viewState.bearing
+                ? this.state.viewState.bearing
+                : 0;
+            bearing < 360 ? (bearing += 0.05) : (bearing = 0);    
+            this.setState({
+                viewState: {
+                    ...this.state.viewState,
+                    bearing: bearing,
+                },    
+            });    
+        }    
+
+        this._updateShipMovement();
 
         // if (this.state.animateABM) {
         let controlRemotely = this.state.controlRemotely
@@ -685,9 +672,6 @@ console.log(newHeading);
             getRadius: d => d.size,
             getFillColor: d => [255, 140, 0],
             getLineColor: d => [0, 0, 0]
-            // transitions: {
-            //     getPosition: 0,
-            // }
         }));
 
         layers.push(new TextLayer({
@@ -721,21 +705,10 @@ console.log(newHeading);
             id: 'icon-layer',
             data: this.state.testData,
             pickable: true,
-            // iconAtlas and iconMapping are required
-            // getIcon: return a string
-            // iconAtlas: 'https://www.kindpng.com/picc/m/774-7748130_cargo-ship-icon-png-cargo-ship-icon-transparent.png',
-            // iconAtlas: 'https://toppng.com/uploads/preview/home-home-sea-container-ship-icon-11563195830cq8dtw2n3l.png',
-            // iconAtlas: '',
-            iconAtlas: ship_image,
-            // iconAtlas: './././data/cargo-ship.png',
-            // iconAtlas: 'https://www.mcicon.com/wp-content/uploads/2021/01/Transport_Ship_1-copy-11.jpg',
-            // iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-         
+            iconAtlas: ship_image,         
             iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
             // iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: true}, 
             // shipBackward: {x: 980, y: 100, width: 980, height: 608, mask: true}},
-
-            // iconMapping:  {ship: {x: 0, y: 0, width: 128, height: 128, mask: false}},
             getIcon: d => d.icon,
             getAngle: d => d.heading,
             sizeScale: 10,
