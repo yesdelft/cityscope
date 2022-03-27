@@ -11,6 +11,10 @@ import {
     hexToRgb,
 } from "./BaseMapUtils";
 
+import {
+    LabeledIconLayer
+} from "./BaseMapCustomLayers";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
 
@@ -343,7 +347,7 @@ class Map extends Component {
             
             let deltaLon = newLongitude - previousLon;
             let deltaLat = newLatitude - previousLat;
-            
+            // think about extracting into separate lib or services folder
             let x = Math.cos(newLatitude) * Math.sin(deltaLon);
             let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
             let newHeading = Math.atan2(x, y) * (180 / Math.PI) - 90;
@@ -674,48 +678,28 @@ class Map extends Component {
             getLineColor: d => [0, 0, 0]
         }));
 
-        layers.push(new TextLayer({
-            id: 'text-layer',
+        layers.push(new LabeledIconLayer({
+            id: 'ship-layer',
             data: this.state.testData,
             pickable: true,
             getPosition: d => d.coordinates,
             getText: d => d.name,
-            getSize: d => 16,//d.size * 5,
-            getPixelOffset: [10, 10],
-            getColor: [255, 255, 255],
-            getBorderColor: [0, 0, 0],
-            getBorderWidth: 6,
-            outlineWidth: 10,
-            // outlineColor: [0, 0, 0],
-            background: true,
-            getAngle: d => 0,//d.heading,
+            getTextSize: d => 16,
+            getTextPixelOffset: [10, 10],
+            getTextColor: [255, 255, 255],
+            getTextBorderColor: [0, 0, 0],
+            getTextBorderWidth: 6,
+            textOutlineWidth: 10,
+            getTextAngle: d => 0,
             getTextAnchor: 'start',
-            getAlignmentBaseline: 'top',
-            transitions: {
-                getPosition: {
-                    duration: 5000
-                },
-                getAngle: {
-                    duration: 5000
-                }
-            }
-          }));
+            getTextAlignmentBaseline: 'top',
 
-          layers.push(new IconLayer({
-            id: 'icon-layer',
-            data: this.state.testData,
-            pickable: true,
             iconAtlas: ship_image,         
             iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
-            // iconMapping:  {shipForward: {x: 0, y: 100, width: 980, height: 608, mask: true}, 
-            // shipBackward: {x: 980, y: 100, width: 980, height: 608, mask: true}},
             getIcon: d => d.icon,
-            getAngle: d => d.heading,
-            sizeScale: 10,
-            getPosition: d => d.coordinates,
-            getSize: d => 3,//d.size,
-            // getColor: d => [0,255,0],
-            getColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
+            getIconAngle: d => d.heading,
+            getIconSize: d => 30,
+            getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
             transitions: {
                 getPosition: {
                     duration: 4000
@@ -724,7 +708,8 @@ class Map extends Component {
                     duration: 1000
                 }
             }
-          }));
+        }).renderLayers());
+
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
