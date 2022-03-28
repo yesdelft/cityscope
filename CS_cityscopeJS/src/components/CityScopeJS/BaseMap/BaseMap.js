@@ -48,7 +48,7 @@ class Map extends Component {
             selectedCellsState: null,
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
-            controlRemotely: true,
+            controlRemotely: false,
             remoteMenu: {toggles: []},
             testData: ships
         };
@@ -101,7 +101,7 @@ class Map extends Component {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
         }
-
+        // console.log("current props ", this.props.menu)
         // toggle REMOTE UI
         if (
             !prevProps.menu.includes("REMOTE") &&
@@ -379,11 +379,16 @@ class Map extends Component {
             });    
         }    
 
-        this._updateShipMovement();
-
-        // if (this.state.animateABM) {
+        
+        
+        
         let controlRemotely = this.state.controlRemotely
         let remote = this.state.remoteMenu;
+        // console.log("calling animate state:", this.state.menu)
+        if ((controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && this.props.menu.includes("AIS"))) {
+            this._updateShipMovement();
+            console.log("updating AIS")
+        }
 
         if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
             const time = this.props.sliders.time[1];
@@ -660,56 +665,57 @@ class Map extends Component {
             );
         }
 
+        let aisToggle = (controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && menu.includes("AIS"))
+        if (aisToggle) {
+            layers.push(new ScatterplotLayer({
+                id: 'scatterplot-layer',
+                data: this.state.testData,
+                pickable: true,
+                opacity: 0.005,
+                stroked: true,
+                filled: true,
+                radiusScale: 6,
+                radiusMinPixels: 1,
+                radiusMaxPixels: 100,
+                lineWidthMinPixels: 1,
+                getPosition: d => d.coordinates,
+                getRadius: d => d.size,
+                getFillColor: d => [255, 140, 0],
+                getLineColor: d => [0, 0, 0]
+            }));
 
-        layers.push(new ScatterplotLayer({
-            id: 'scatterplot-layer',
-            data: this.state.testData,
-            pickable: true,
-            opacity: 0.005,
-            stroked: true,
-            filled: true,
-            radiusScale: 6,
-            radiusMinPixels: 1,
-            radiusMaxPixels: 100,
-            lineWidthMinPixels: 1,
-            getPosition: d => d.coordinates,
-            getRadius: d => d.size,
-            getFillColor: d => [255, 140, 0],
-            getLineColor: d => [0, 0, 0]
-        }));
+            layers.push(new LabeledIconLayer({
+                id: 'ship-layer',
+                data: this.state.testData,
+                pickable: true,
+                getPosition: d => d.coordinates,
+                getText: d => d.name,
+                getTextSize: d => 16,
+                getTextPixelOffset: [10, 10],
+                getTextColor: [255, 255, 255],
+                getTextBorderColor: [0, 0, 0],
+                getTextBorderWidth: 6,
+                textOutlineWidth: 10,
+                getTextAngle: d => 0,
+                getTextAnchor: 'start',
+                getTextAlignmentBaseline: 'top',
 
-        layers.push(new LabeledIconLayer({
-            id: 'ship-layer',
-            data: this.state.testData,
-            pickable: true,
-            getPosition: d => d.coordinates,
-            getText: d => d.name,
-            getTextSize: d => 16,
-            getTextPixelOffset: [10, 10],
-            getTextColor: [255, 255, 255],
-            getTextBorderColor: [0, 0, 0],
-            getTextBorderWidth: 6,
-            textOutlineWidth: 10,
-            getTextAngle: d => 0,
-            getTextAnchor: 'start',
-            getTextAlignmentBaseline: 'top',
-
-            iconAtlas: ship_image,         
-            iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
-            getIcon: d => d.icon,
-            getIconAngle: d => d.heading,
-            getIconSize: d => 30,
-            getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
-            transitions: {
-                getPosition: {
-                    duration: 4000
-                },
-                getAngle: {
-                    duration: 1000
+                iconAtlas: ship_image,         
+                iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
+                getIcon: d => d.icon,
+                getIconAngle: d => d.heading,
+                getIconSize: d => 30,
+                getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
+                transitions: {
+                    getPosition: {
+                        duration: 4000
+                    },
+                    getAngle: {
+                        duration: 1000
+                    }
                 }
-            }
-        }).renderLayers());
-
+            }).renderLayers());
+        }
         // if (menu.includes("Bounds")) {
             if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
                 layers.push(
@@ -724,7 +730,7 @@ class Map extends Component {
                     })
             );
         }
-
+        
         // if (menu.includes("ACCESS")) {
         let accessToggle = (controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))
         if (accessToggle) {
