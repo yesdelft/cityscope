@@ -29,7 +29,6 @@ import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 import axios from "axios";
 
 // data from externally added json files
-import ui_control from "./ui_control.json";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
@@ -261,6 +260,13 @@ class Map extends Component {
         );
     };
 
+    isMenuToggled = (item) => {
+        let controlRemotely = this.state.controlRemotely;
+        let remote = this.state.remoteMenu;
+        let menu = this.props.menu;
+        return (controlRemotely && remote.toggles.includes(item)) || (!controlRemotely && menu.includes(item));
+    };
+
 
     /**
      * resets the camera viewport
@@ -386,7 +392,7 @@ class Map extends Component {
         let controlRemotely = this.state.controlRemotely
         let remote = this.state.remoteMenu;
         // console.log("calling animate state:", this.state.menu)
-        if ((controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && this.props.menu.includes("AIS"))) {
+        if (this.isMenuToggled("AIS")) {
             this._updateShipMovement();
         }
 
@@ -523,17 +529,14 @@ class Map extends Component {
 
         let layers = [];
         
-        // console.log("rear rendering");
-        // console.log("remote state:",this.state.remoteMenu);
         let remote = this.state.remoteMenu;
-        let controlRemotely = this.state.controlRemotely
+        let controlRemotely = this.state.controlRemotely;
 
-        if ((controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM"))) {
+        if (this.isMenuToggled("ABM")) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
-                    // visible: menu.includes("ABM") ? true : false,
-                    visible: (controlRemotely && remote.toggles.includes("ABM")) || (!controlRemotely && menu.includes("ABM")) ? true : false,
+                    visible: this.isMenuToggled("ABM"),
                     data: cityioFakeABMData.trips,
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
@@ -561,7 +564,6 @@ class Map extends Component {
             );
         }
 
-        // if (menu.includes("AGGREGATED_TRIPS")) {
         if ((controlRemotely && remote.toggles.includes("AGGREGATED TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS"))) {
             layers.push(
                 new PathLayer({
@@ -601,13 +603,12 @@ class Map extends Component {
             );
         }
 
-        // if (menu.includes("GRID")) {
-        if ((controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID"))) {
+        if (this.isMenuToggled("GRID")) {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
                     data: this.state.GEOGRID,
-                    visible: (controlRemotely && remote.toggles.includes("GRID")) || (!controlRemotely && menu.includes("GRID")) ? true : false,
+                    visible: this.isMenuToggled("GRID"),
                     pickable: true,
                     extruded: true,
                     wireframe: true,
@@ -665,8 +666,7 @@ class Map extends Component {
             );
         }
 
-        let aisToggle = (controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && menu.includes("AIS"))
-        if (aisToggle) {
+        if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
                 data: this.state.testData,
@@ -716,8 +716,7 @@ class Map extends Component {
                 }
             }).renderLayers());
         }
-        // if (menu.includes("Bounds")) {
-            if ((controlRemotely && remote.toggles.includes("Bounds")) || (!controlRemotely && menu.includes("Bounds"))) {
+        if (this.isMenuToggled("Bounds")) {
                 layers.push(
                     new SolidPolygonLayer({
                         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
@@ -730,15 +729,12 @@ class Map extends Component {
                     })
             );
         }
-        
-        // if (menu.includes("ACCESS")) {
-        let accessToggle = (controlRemotely && remote.toggles.includes("ACCESS")) || (!controlRemotely && menu.includes("ACCESS"))
-        if (accessToggle) {
+
+        if (this.isMenuToggled("ACCESS")) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
-                    // visible: menu.includes("ACCESS"),
-                    visible: accessToggle,
+                    visible: this.isMenuToggled("ACCESS"),
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
@@ -755,10 +751,7 @@ class Map extends Component {
             );
         }
 
-        // if (menu.includes("LST")) 
-        // {
-        let LSTAccessToggle = (controlRemotely && remote.toggles.includes("LST")) || (!controlRemotely && menu.includes("LST"))
-        if (LSTAccessToggle)
+        if (this.isMenuToggled("LST"))
         {
         layers.push(
             new BitmapLayer({
@@ -769,12 +762,7 @@ class Map extends Component {
             );
         }
 
-        // if (ui_control.LST.enabled) 
-        let AQIAccessToggle = (controlRemotely && remote.toggles.includes("AQI")) || (!controlRemotely && menu.includes("AQI"))
-        if (!LSTAccessToggle && AQIAccessToggle) {
-        // if (menu.includes("AQI")) 
-        // {      
-        // console.log("hi I am in here");
+        if (!this.isMenuToggled("LST") && this.isMenuToggled("AQI")) {
         layers.push(
                     // new TileLayer(
                     //         {
@@ -809,40 +797,9 @@ class Map extends Component {
                     
         }
 
-        if ((controlRemotely && remote.toggles.includes("calibrationGridLayer")) || (!controlRemotely && menu.includes("calibrationGridLayer")) ) 
+        if (this.isMenuToggled("calibrationGridLayer")) 
         {   
-            // var initLat= settings.map.viewCalibration.latitude;
-            // var initLon= settings.map.viewCalibration.longitude;
-            // var gridCoord={};
-            // var cellSize= 200;
-            // var tempLat, tempLon;
-            // for(int i=initLat, )
-            // {
-
-            // }
-                
-            console.log("inside calibGridLayer")
             layers.push(
-
-                // new GridCellLayer({
-                // /**
-                //  * Data format:
-                //  * [
-                //  *   {centroid: [-122.4, 37.7], value: 100},
-                //  *   ...
-                //  * ]
-                //  */
-                //     id: 'grid-cell-layer',
-                //     data: grid_200_data,
-                //     pickable: true,
-                //     extruded: false,
-                //     cellSize: 200,
-                //     elevationScale: 1,
-                //     getPosition: [4.45313, 51.89948],//d => d.geometry.coordinates,
-                //     getFillColor: [48, 128, 255, 255]
-                //     // getElevation: d => d.value
-                // })
-
                 // attempt with  GeoJSON layer
                 new GeoJsonLayer({
                     id: 'geojson-layer',
@@ -861,37 +818,9 @@ class Map extends Component {
                     getLineWidth: 5,
                     getElevation: 10
                   })
-
-                // // attempt with  screengrid layer
-                // new ScreenGridLayer(
-                //     {
-                //     id: 'screen-grid-layer',
-                //     data,
-                //     pickable: false,
-                //     opacity: 0.8,
-                //     cellSizePixels: 200,
-                //     colorRange: [
-                //         [0, 25, 0, 25],
-                //         [0, 85, 0, 85],
-                //         [0, 127, 0, 127],
-                //         [0, 170, 0, 170],
-                //         [0, 190, 0, 190],
-                //         [0, 255, 0, 255]
-                //         ],
-                //     getPosition: d => d.COORDINATES,
-                //     getWeight: d => d.SPACES
-                //     })
              );
         }   
 
-
-
-        // if (menu.includes("REMOTE")) {
-        //     this.setState({
-        //         controlRemotely: true,
-        //     })
-        // }
-        // console.log("menu//:", this.props);
         return layers;
     }
 
