@@ -43,6 +43,11 @@
                 "showOnInit": false,
                 "requireModule": false
             },
+            "AIS": {
+                "displayName": "AIS Ship Tracking",
+                "showOnInit": false,
+                "requireModule": false
+            },
             "AGGREGATED_TRIPS": {
                 "displayName": "Aggregated Trips",
                 "showOnInit": false,
