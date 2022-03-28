@@ -498,12 +498,12 @@ class Map extends Component {
             );
         }
 
-        if ((controlRemotely && remote.toggles.includes("AGGREGATED TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS"))) {
+        if (this.isMenuToggled("AGGREGATED_TRIPS")) {
+            
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
-                    // visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
-                    visible: (controlRemotely && remote.toggles.includes("AGGREGATED TRIPS")) || (!controlRemotely && menu.includes("AGGREGATED_TRIPS")) ? true : false,
+                    visible: this.isMenuToggled("AGGREGATED_TRIPS"),
                     _shadow: false,
                     data: cityioFakeABMData.trips,
                     getPath: (d) => {
