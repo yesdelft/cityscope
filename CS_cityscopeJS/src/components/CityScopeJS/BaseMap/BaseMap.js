@@ -11,12 +11,16 @@ import {
     hexToRgb,
 } from "./BaseMapUtils";
 
+import {
+    LabeledIconLayer
+} from "./BaseMapCustomLayers";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer, GridCellLayer} from '@deck.gl/layers';
+import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -28,6 +32,9 @@ import axios from "axios";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
+// import ship_image from "../../../data/shipAtlas.png"; 
+import ship_image from "../../../data/AISIcons.png"; 
+import ships from "../../../data/ships.json"; 
 
 class Map extends Component {
     constructor(props) {
@@ -41,9 +48,11 @@ class Map extends Component {
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
-            remoteMenu: {toggles: []}
+            remoteMenu: {toggles: []},
+            testData: ships
         };
         this.animationFrame = null;
+        // this.startTime = new Date();
     }
 
     componentWillUnmount() {
@@ -91,7 +100,7 @@ class Map extends Component {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
         }
-
+        // console.log("current props ", this.props.menu)
         // toggle REMOTE UI
         if (
             !prevProps.menu.includes("REMOTE") &&
@@ -312,23 +321,80 @@ class Map extends Component {
             date.getSeconds()
         );
     };
+    _updateShipMovement = () => {
+        let date = new Date();
+        let startDate = new Date(2011,7,5,2,1,1);
+        let elapsedSeconds = date - startDate;
+        let speed = 0.5;
+        elapsedSeconds = Math.floor(elapsedSeconds / (1000 / speed));
+        // let elapsedSeconds = date.getSeconds();
+        let items = [...this.state.testData];
+        for (var i=0; i<items.length; i++) {
+            let step = elapsedSeconds % items[i].route.length;
+            let pingOrPong = Math.floor(elapsedSeconds / items[i].route.length) % 2;
+            if (pingOrPong == 1) {
+                step = items[i].route.length - step - 1;
+            }
+            let latitude = items[i].route[step][0];
+            let longitude = items[i].route[step][1];
+            
+            let newLatitude = items[i].route[step][0] * Math.PI / 180;
+            let newLongitude = items[i].route[step][1] * Math.PI / 180;
+            let previousStep = 0;
+            if (step > 0 && pingOrPong == 0) {
+                previousStep = step - 1
+            }else if (pingOrPong == 1) {
+                previousStep = items[i].route.length - 1;
+                if (step != previousStep) {
+                    previousStep = step + 1;
+                }
+            }
+            let previousLat = items[i].route[previousStep][0] * Math.PI / 180;
+            let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
+            
+            let deltaLon = newLongitude - previousLon;
+            let deltaLat = newLatitude - previousLat;
+            // think about extracting into separate lib or services folder
+            let x = Math.cos(newLatitude) * Math.sin(deltaLon);
+            let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
+            let newHeading = Math.atan2(x, y) * (180 / Math.PI) - 90;
+
+            let newIcon = "shipForward";
+            let item = {
+                ...items[i],
+                coordinates: [latitude, longitude],
+                heading: newHeading,
+                icon: newIcon
+                // name: newHeading.toString()
+            }
+            items[i] = item
+        }
+        this.setState({testData: items})
+    };
 
     _animate() {
         if (this.state.animateCamera) {
             let bearing = this.state.viewState.bearing
                 ? this.state.viewState.bearing
                 : 0;
-            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
+            bearing < 360 ? (bearing += 0.05) : (bearing = 0);    
             this.setState({
                 viewState: {
                     ...this.state.viewState,
                     bearing: bearing,
-                },
-            });
-        }
+                },    
+            });    
+        }    
 
-        // if (this.state.animateABM) {
+        
+        
+        
         let controlRemotely = this.state.controlRemotely
+        let remote = this.state.remoteMenu;
+        // console.log("calling animate state:", this.state.menu)
+        if (this.isMenuToggled("AIS")) {
+            this._updateShipMovement();
+        }
 
         if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
             const time = this.props.sliders.time[1];
@@ -499,7 +565,6 @@ class Map extends Component {
         }
 
         if (this.isMenuToggled("AGGREGATED_TRIPS")) {
-            
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
@@ -600,6 +665,56 @@ class Map extends Component {
             );
         }
 
+        if (this.isMenuToggled("AIS")) {
+            layers.push(new ScatterplotLayer({
+                id: 'ship-target-layer',
+                data: this.state.testData,
+                pickable: true,
+                opacity: 0.002,
+                stroked: true,
+                filled: true,
+                radiusScale: 6,
+                radiusMinPixels: 1,
+                radiusMaxPixels: 100,
+                lineWidthMinPixels: 1,
+                getPosition: d => d.coordinates,
+                getRadius: d => 2,
+                getFillColor: d => [255, 140, 0],
+                getLineColor: d => [0, 0, 0]
+            }));
+
+            layers.push(new LabeledIconLayer({
+                id: 'ship-layer',
+                data: this.state.testData,
+                pickable: true,
+                getPosition: d => d.coordinates,
+                getText: d => d.name,
+                getTextSize: d => 16,
+                getTextPixelOffset: [10, 10],
+                getTextColor: [255, 255, 255],
+                getTextBorderColor: [0, 0, 0],
+                getTextBorderWidth: 6,
+                textOutlineWidth: 10,
+                getTextAngle: d => 0,
+                getTextAnchor: 'start',
+                getTextAlignmentBaseline: 'top',
+
+                iconAtlas: ship_image,         
+                iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
+                getIcon: d => d.icon,
+                getIconAngle: d => d.heading,
+                getIconSize: d => 30,
+                getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
+                transitions: {
+                    getPosition: {
+                        duration: 7500
+                    },
+                    getAngle: {
+                        duration: 1000
+                    }
+                }
+            }).renderLayers());
+        }
         if (this.isMenuToggled("Bounds")) {
                 layers.push(
                     new SolidPolygonLayer({
