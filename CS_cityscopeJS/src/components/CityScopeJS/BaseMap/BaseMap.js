@@ -568,7 +568,6 @@ class Map extends Component {
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
-                    // visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
                     visible: this.isMenuToggled("AGGREGATED_TRIPS"),
                     _shadow: false,
                     data: cityioFakeABMData.trips,

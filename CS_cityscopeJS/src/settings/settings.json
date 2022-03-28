@@ -118,14 +118,16 @@
         "initialViewState": {
                                 "zoom": 17,
                                 "pitch": 0,
-                                "bearing": 0
+                                "bearing": 0,
+                                "orthographic": true
                             },
         "viewCalibration": {
                                 "zoom": 13.895,
                                 "pitch": 0,
                                 "rotate": 0.9,
                                 "longitude":  4.4901,
-                                "latitude": 51.91456
+                                "latitude": 51.91456,
+                                "orthographic": true
                             },
         "main_map_display":{
                                 "margin": "10vh 15vw 10vh 15vw",
