@@ -12,7 +12,12 @@ class MapContainer extends Component {
     render() {
         return (
             <div
-                style={settings.map.main_map_display}
+                style={{
+                    height: "100vh",
+                    width: "100vw",
+                    overflow: "hidden"
+                }}
+                // style={settings.map.main_map_display}
             >
                 <ProjectionMapping
                     style={{
