@@ -48,7 +48,7 @@ class Map extends Component {
             selectedCellsState: null,
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
-            controlRemotely: false,
+            controlRemotely: true,
             remoteMenu: {toggles: []},
             testData: ships
         };
@@ -319,7 +319,8 @@ class Map extends Component {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
         let elapsedSeconds = date - startDate;
-        elapsedSeconds = Math.floor(elapsedSeconds / 1000);
+        let speed = 0.5;
+        elapsedSeconds = Math.floor(elapsedSeconds / (1000 / speed));
         // let elapsedSeconds = date.getSeconds();
         let items = [...this.state.testData];
         for (var i=0; i<items.length; i++) {
@@ -387,7 +388,6 @@ class Map extends Component {
         // console.log("calling animate state:", this.state.menu)
         if ((controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && this.props.menu.includes("AIS"))) {
             this._updateShipMovement();
-            console.log("updating AIS")
         }
 
         if ((controlRemotely && this.state.remoteAnimateABM) || (!controlRemotely && this.state.animateABM)) {
@@ -668,10 +668,10 @@ class Map extends Component {
         let aisToggle = (controlRemotely && remote.toggles.includes("AIS")) || (!controlRemotely && menu.includes("AIS"))
         if (aisToggle) {
             layers.push(new ScatterplotLayer({
-                id: 'scatterplot-layer',
+                id: 'ship-target-layer',
                 data: this.state.testData,
                 pickable: true,
-                opacity: 0.005,
+                opacity: 0.002,
                 stroked: true,
                 filled: true,
                 radiusScale: 6,
@@ -679,7 +679,7 @@ class Map extends Component {
                 radiusMaxPixels: 100,
                 lineWidthMinPixels: 1,
                 getPosition: d => d.coordinates,
-                getRadius: d => d.size,
+                getRadius: d => 2,
                 getFillColor: d => [255, 140, 0],
                 getLineColor: d => [0, 0, 0]
             }));
@@ -708,7 +708,7 @@ class Map extends Component {
                 getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
                 transitions: {
                     getPosition: {
-                        duration: 4000
+                        duration: 7500
                     },
                     getAngle: {
                         duration: 1000
