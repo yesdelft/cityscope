@@ -215,9 +215,9 @@ class Map extends Component {
                 lines.map(function(line) {
                     let items = line.split("\t");
                     let name = items[2];
-                    let latitude = items[5];
-                    let longitude = items[6];
-                    let heading = items[7];
+                    let latitude =parseFloat(items[5]);
+                    let longitude = parseFloat(items[6]);
+                    let heading = parseInt(items[7]);
                     // console.log(name, latitude, longitude, heading);
 
                     let currentShip = {
@@ -235,7 +235,7 @@ class Map extends Component {
                 
                 // console.log(realShipData)
                 // console.log("parched AIS payload is: ",JSON.parse(payload)); 
-                console.log("just set state hazewithlength", newShipData.length)
+                // console.log("just set staselfte hazewithlength", newShipData.length)
 //                 var fs = require('fs');
 // fs.writeFile('myjsonfile.json', response.data, 'utf8'); 
             })
@@ -750,6 +750,7 @@ class Map extends Component {
         }
 
         if (this.isMenuToggled("AIS")) {
+            // console.log("startled", this.state.realShipData[0])
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
                 data: this.state.realShipData,
@@ -763,6 +764,8 @@ class Map extends Component {
                 radiusMaxPixels: 100,
                 lineWidthMinPixels: 1,
                 getPosition: d => d.coordinates,
+                // getPosition: d => {console.log(d.coordinates,d.name);return d.coordinates;},
+                // [51.8956,4.61108]
                 getRadius: d => 2,
                 getFillColor: d => [255, 140, 0],
                 getLineColor: d => [0, 0, 0]
