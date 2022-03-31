@@ -49,7 +49,8 @@ class Map extends Component {
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
             remoteMenu: {toggles: []},
-            testData: ships
+            testData: ships,
+            realShipData: []
         };
         this.animationFrame = null;
         // this.startTime = new Date();
@@ -74,6 +75,8 @@ class Map extends Component {
 
         this._isMounted = true;
         this.handleUIURL()
+        // this.getUIData("https://services.myshiptracking.com/requests/vesselsonmaptempw.php?type=json&minlat=51.88486234625088&maxlat=51.92087326230456&minlon=4.452037811279298&maxlon=4.543018341064454&zoom=13&selid=null&seltype=null&timecode=-1&slmp=vd8dz&filters=%7B%22vtypes%22%3A%22%2C0%2C3%2C4%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%22%2C%22minsog%22%3A0%2C%22maxsog%22%3A60%2C%22minsz%22%3A10%2C%22maxsz%22%3A500%2C%22minyr%22%3A1950%2C%22maxyr%22%3A2022%2C%22flag%22%3A%22%22%2C%22status%22%3A%22%22%2C%22mapflt_from%22%3A%22%22%2C%22mapflt_dest%22%3A%22%22%7D&_=1648633885538")
+        this.handleAIS()
     }
 
     /**
@@ -196,6 +199,68 @@ class Map extends Component {
     };
 
     
+    getAISData = (URL) => {
+        axios
+            .get(URL)
+            .then((response) => {
+                // put response to state obj
+                // console.log("receiving UI data:", response.data);
+                // let payload = ui_control;
+                let payload = response.data;
+                // console.log("AIS payload is: ",payload);
+                let lines = payload.split(/\r?\n/);
+                lines.shift();
+                // console.log("AIS payload is: ",lines);
+                let newShipData = []
+                lines.map(function(line) {
+                    let items = line.split("\t");
+                    let name = items[2];
+                    let latitude = items[5];
+                    let longitude = items[6];
+                    let heading = items[7];
+                    // console.log(name, latitude, longitude, heading);
+
+                    let currentShip = {
+                        "name": name,
+                        "coordinates": [longitude, latitude],
+                        // "coordinates": [latitude, longitude],
+                        "heading": heading,
+                        "color": [0,0,0],
+                        "icon": "shipForward",
+                    }
+                    newShipData.push(currentShip)
+                });
+                
+                this.setState({realShipData: newShipData});
+                
+                // console.log(realShipData)
+                // console.log("parched AIS payload is: ",JSON.parse(payload)); 
+                console.log("just set state hazewithlength", newShipData.length)
+//                 var fs = require('fs');
+// fs.writeFile('myjsonfile.json', response.data, 'utf8'); 
+            })
+
+            .catch((error) => {
+                if (error.response) {
+                    console.log(
+                        "error.response:",
+                        "\n",
+                        error.response.data,
+                        "\n",
+                        error.response.status,
+                        "\n",
+                        error.response.headers
+                    );
+                } else if (error.request) {
+                    console.log("error.request:", error.request);
+                } else {
+                    console.log("misc error:", error.message);
+                }
+                console.log("request config:", error.config);
+            });
+    };
+
+    
     getUIData = (URL) => {
         axios
             .get(URL)
@@ -251,6 +316,24 @@ class Map extends Component {
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
                 this.getUIData(cityioURL)
+            }
+        }, interval);
+        console.log(
+            "starting UI GET interval every " +
+                interval +
+                "ms "
+        );
+    };
+    handleAIS = () => {
+        // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
+        // let cityioURL = "https://reqres.in/api/users/2";
+        let cityioURL = "https://services.myshiptracking.com/requests/vesselsonmaptempw.php?type=json&minlat=51.88486234625088&maxlat=51.92087326230456&minlon=4.452037811279298&maxlon=4.543018341064454&zoom=13&selid=null&seltype=null&timecode=-1&slmp=vd8dz&filters=%7B%22vtypes%22%3A%22%2C0%2C3%2C4%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%22%2C%22minsog%22%3A0%2C%22maxsog%22%3A60%2C%22minsz%22%3A10%2C%22maxsz%22%3A500%2C%22minyr%22%3A1950%2C%22maxyr%22%3A2022%2C%22flag%22%3A%22%22%2C%22status%22%3A%22%22%2C%22mapflt_from%22%3A%22%22%2C%22mapflt_dest%22%3A%22%22%7D&_=1648633885538";
+		this.getAISData(cityioURL)
+		let interval = 7000
+        // and every interval
+        this.timer = setInterval(() => {
+            if (this._isMounted && this.state.controlRemotely) {
+                this.getAISData(cityioURL)
             }
         }, interval);
         console.log(
@@ -669,7 +752,8 @@ class Map extends Component {
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
-                data: this.state.testData,
+                data: this.state.realShipData,
+                // data: this.state.testData,
                 pickable: true,
                 opacity: 0.002,
                 stroked: true,
@@ -686,7 +770,8 @@ class Map extends Component {
 
             layers.push(new LabeledIconLayer({
                 id: 'ship-layer',
-                data: this.state.testData,
+                data: this.state.realShipData,
+                // data: this.state.testData,
                 pickable: true,
                 getPosition: d => d.coordinates,
                 getText: d => d.name,
