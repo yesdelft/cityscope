@@ -35,7 +35,6 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
-
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -217,21 +216,35 @@ class Map extends Component {
                     let name = items[2];
                     let latitude =parseFloat(items[5]);
                     let longitude = parseFloat(items[6]);
-                    let heading = parseInt(items[7]);
+                    // let heading = parseInt(items[7]);
+                    let heading = parseFloat(items[4]) - 90;
+                    let speed = parseFloat(items[3]);
                     // console.log(name, latitude, longitude, heading);
 
+                    let icon = (speed > 0) ? "shipForward" : "shipStationary";
+                    
                     let currentShip = {
                         "name": name,
                         "coordinates": [longitude, latitude],
                         // "coordinates": [latitude, longitude],
                         "heading": heading,
                         "color": [0,0,0],
-                        "icon": "shipForward",
+                        "icon": icon,
                     }
+//                     if (name.includes("ABEL"))  {
+// console.log(line);
+
+//                     }
                     newShipData.push(currentShip)
                 });
-                
+                // fs.writeFileSync('/tmp/test-sync', 'Hey there!');
                 this.setState({realShipData: newShipData});
+                // const os = require("os");
+
+// get temp directory
+// const tempDir = os.tmpdir(); // /tmpdir
+// console.log(tempDir);
+// console.log(lines);
                 
                 // console.log(realShipData)
                 // console.log("parched AIS payload is: ",JSON.parse(payload)); 
@@ -328,8 +341,8 @@ class Map extends Component {
         // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
         // let cityioURL = "https://reqres.in/api/users/2";
         let cityioURL = "https://services.myshiptracking.com/requests/vesselsonmaptempw.php?type=json&minlat=51.88486234625088&maxlat=51.92087326230456&minlon=4.452037811279298&maxlon=4.543018341064454&zoom=13&selid=null&seltype=null&timecode=-1&slmp=vd8dz&filters=%7B%22vtypes%22%3A%22%2C0%2C3%2C4%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%22%2C%22minsog%22%3A0%2C%22maxsog%22%3A60%2C%22minsz%22%3A10%2C%22maxsz%22%3A500%2C%22minyr%22%3A1950%2C%22maxyr%22%3A2022%2C%22flag%22%3A%22%22%2C%22status%22%3A%22%22%2C%22mapflt_from%22%3A%22%22%2C%22mapflt_dest%22%3A%22%22%7D&_=1648633885538";
-		this.getAISData(cityioURL)
-		let interval = 7000
+		this.getAISData(cityioURL);
+		let interval = 5000;
         // and every interval
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
@@ -777,7 +790,7 @@ class Map extends Component {
                 // data: this.state.testData,
                 pickable: true,
                 getPosition: d => d.coordinates,
-                getText: d => d.name,
+                getText: d => d.name,//""+d.heading,
                 getTextSize: d => 16,
                 getTextPixelOffset: [10, 10],
                 getTextColor: [255, 255, 255],
@@ -789,14 +802,17 @@ class Map extends Component {
                 getTextAlignmentBaseline: 'top',
 
                 iconAtlas: ship_image,         
-                iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
+                iconMapping:  {
+                    shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true},
+                    shipStationary: {x: 100, y: 28, width: 14, height: 43, mask: true}
+                }, 
                 getIcon: d => d.icon,
                 getIconAngle: d => d.heading,
                 getIconSize: d => 30,
                 getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
                 transitions: {
                     getPosition: {
-                        duration: 7500
+                        duration: 1//7500
                     },
                     getAngle: {
                         duration: 1000
