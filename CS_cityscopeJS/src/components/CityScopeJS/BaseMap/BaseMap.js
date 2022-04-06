@@ -217,12 +217,12 @@ class Map extends Component {
                     let latitude =parseFloat(items[5]);
                     let longitude = parseFloat(items[6]);
                     // let heading = parseInt(items[7]);
-                    let heading = parseFloat(items[4]) - 90;
+                    let heading = parseFloat(items[4]);
                     let speed = parseFloat(items[3]);
                     // console.log(name, latitude, longitude, heading);
 
-                    let icon = (speed > 0) ? "shipForward" : "shipStationary";
-                    
+                    let icon = (speed > 0.1) ? "shipForward" : "shipStationary";
+                    heading = (heading === 511) ? 0 : heading;
                     let currentShip = {
                         "name": name,
                         "coordinates": [longitude, latitude],
@@ -791,7 +791,7 @@ class Map extends Component {
                 pickable: true,
                 getPosition: d => d.coordinates,
                 getText: d => d.name,//""+d.heading,
-                getTextSize: d => 16,
+                getTextSize: d => 10,
                 getTextPixelOffset: [10, 10],
                 getTextColor: [255, 255, 255],
                 getTextBorderColor: [0, 0, 0],
@@ -803,12 +803,12 @@ class Map extends Component {
 
                 iconAtlas: ship_image,         
                 iconMapping:  {
-                    shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true},
-                    shipStationary: {x: 100, y: 28, width: 14, height: 43, mask: true}
+                    shipForward: {x: 100, y: 1, width: 13, height: 20, mask: false},
+                    shipStationary: {x: 100, y: 28, width: 14, height: 14, mask: false}
                 }, 
                 getIcon: d => d.icon,
                 getIconAngle: d => d.heading,
-                getIconSize: d => 30,
+                getIconSize: d => (d.icon == "shipForward") ? 25 : 15,
                 getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
                 transitions: {
                     getPosition: {
