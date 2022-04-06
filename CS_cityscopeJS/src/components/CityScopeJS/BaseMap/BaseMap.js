@@ -665,6 +665,35 @@ class Map extends Component {
             );
         }
 
+
+        
+        layers.push(new TextLayer({
+            data: [{energy:50}],
+            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
+            getText: d => "Energy: " +  d.energy,
+            getSize: d => 25,
+            getPixelOffset: [20, 0],
+            getColor: [255, 255, 255],
+            getBorderColor: [0, 0, 0],
+            getBorderWidth: 6,
+            OutlineWidth: 10,
+            getTextAnchor: 'start',
+            getAlignmentBaseline: 'center',
+        }));
+        layers.push(new IconLayer({
+            id: 'usage-layer',
+            data: [{energy:50}],
+            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
+            pickable: true,
+            getIcon: d => ({
+                url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
+                width: 128,
+                height: 128
+            }),//d.icon,
+            // getIcon: d => "shipForward",
+            getSize: d => 30,
+            // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
+        }));
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
