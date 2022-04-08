@@ -53,6 +53,17 @@ class Map extends Component {
         };
         this.animationFrame = null;
         // this.startTime = new Date();
+        // TextLayer.fontSettings.sdf = true;
+        this.b = [
+            {name: "energy",
+            amount:50,
+            y:0,
+            img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            {name: "heating",
+            amount:50,
+            y:500,
+            img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
+        ]        
     }
 
     componentWillUnmount() {
@@ -668,9 +679,11 @@ class Map extends Component {
 
         
         layers.push(new TextLayer({
-            data: [{energy:50}],
+            data: this.b,// [{energy:50}],
             getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
-            getText: d => "Energy: " +  d.energy,
+            getText: d =>  d.name + ": " +  d.amount,
+            // getText: d =>  "Energy: " +  d.energy,.
+
             getSize: d => 25,
             getPixelOffset: [20, 0],
             getColor: [255, 255, 255],
@@ -679,16 +692,18 @@ class Map extends Component {
             OutlineWidth: 10,
             getTextAnchor: 'start',
             getAlignmentBaseline: 'center',
+            sdf: true
         }));
         layers.push(new IconLayer({
             id: 'usage-layer',
-            data: [{energy:50}],
+            data: this.b,
             getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
             pickable: true,
             getIcon: d => ({
-                url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
+                url: d.img,
                 width: 128,
-                height: 128
+                height: 128,
+                anchorY: d.y
             }),//d.icon,
             // getIcon: d => "shipForward",
             getSize: d => 30,
