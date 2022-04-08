@@ -210,7 +210,8 @@ class Map extends Component {
                 let lines = payload.split(/\r?\n/);
                 lines.shift();
                 // console.log("AIS payload is: ",lines);
-                let newShipData = []
+                let newShipData = [];
+                let oldShipData = this.state.realShipData;
                 lines.map(function(line) {
                     let items = line.split("\t");
                     let name = items[2];
@@ -220,9 +221,15 @@ class Map extends Component {
                     let heading = parseFloat(items[4]);
                     let speed = parseFloat(items[3]);
                     // console.log(name, latitude, longitude, heading);
-
                     let icon = (speed > 0.1) ? "shipForward" : "shipStationary";
-                    heading = (heading === 511) ? 0 : heading;
+                    // console.log(this.state.realShipData);
+                    let oldShip = oldShipData.find(x => x.name === name);
+                    if (oldShip) {
+                        let oldLocation = oldShip.coordinates;
+                        heading = this._computeHeading(oldLocation[1], oldLocation[0], latitude, longitude);
+                        console.log(oldLocation[1], oldLocation[0], latitude, longitude)
+                    }
+                    // heading = (heading === 511) ? 0 : heading;
                     let currentShip = {
                         "name": name,
                         "coordinates": [longitude, latitude],
@@ -236,7 +243,7 @@ class Map extends Component {
 
 //                     }
                     newShipData.push(currentShip)
-                });
+                },this);
                 // fs.writeFileSync('/tmp/test-sync', 'Hey there!');
                 this.setState({realShipData: newShipData});
                 // const os = require("os");
@@ -281,6 +288,7 @@ class Map extends Component {
                 // put response to state obj
                 // console.log("receiving UI data:", response.data);
                 // let payload = ui_control;
+                // console.log(this.state.realShipData);
                 let payload = response.data;
                 let previousMenu = this.state.remoteMenu;
                 if (
@@ -344,6 +352,7 @@ class Map extends Component {
 		this.getAISData(cityioURL);
 		let interval = 5000;
         // and every interval
+        // console.log(this.state.realShipData);
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
                 this.getAISData(cityioURL)
@@ -417,6 +426,21 @@ class Map extends Component {
             date.getSeconds()
         );
     };
+
+    _computeHeading = (oldLatitude, oldLongitude, newLatitude, newLongitude) => {
+        newLatitude = newLatitude * Math.PI / 180;
+        newLongitude = newLongitude * Math.PI / 180;
+        let previousLat = oldLatitude * Math.PI / 180;
+        let previousLon = oldLongitude * Math.PI / 180;
+        let deltaLon = newLongitude - previousLon;
+        let deltaLat = newLatitude - previousLat;
+        // think about extracting into separate lib or services folder
+        let x = Math.cos(newLatitude) * Math.sin(deltaLon);
+        let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
+        let newHeading = Math.atan2(x, y) * (180 / Math.PI) - 90;
+        return newHeading;
+    };
+
     _updateShipMovement = () => {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
@@ -434,8 +458,6 @@ class Map extends Component {
             let latitude = items[i].route[step][0];
             let longitude = items[i].route[step][1];
             
-            let newLatitude = items[i].route[step][0] * Math.PI / 180;
-            let newLongitude = items[i].route[step][1] * Math.PI / 180;
             let previousStep = 0;
             if (step > 0 && pingOrPong == 0) {
                 previousStep = step - 1
@@ -445,15 +467,12 @@ class Map extends Component {
                     previousStep = step + 1;
                 }
             }
-            let previousLat = items[i].route[previousStep][0] * Math.PI / 180;
-            let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
+            let newLatitude = items[i].route[step][0];
+            let newLongitude = items[i].route[step][1];
+            let previousLat = items[i].route[previousStep][0];
+            let previousLon = items[i].route[previousStep][1];
             
-            let deltaLon = newLongitude - previousLon;
-            let deltaLat = newLatitude - previousLat;
-            // think about extracting into separate lib or services folder
-            let x = Math.cos(newLatitude) * Math.sin(deltaLon);
-            let y = Math.cos(previousLat) * Math.sin(newLatitude) - Math.sin(previousLat) * Math.cos(newLatitude) * Math.cos(deltaLon);
-            let newHeading = Math.atan2(x, y) * (180 / Math.PI) - 90;
+            let newHeading = this._computeHeading(previousLat, previousLon, newLatitude, newLongitude);
 
             let newIcon = "shipForward";
             let item = {
