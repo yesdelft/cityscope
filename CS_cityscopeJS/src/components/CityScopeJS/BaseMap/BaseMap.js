@@ -35,6 +35,8 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
+import heating_image from "../../../data/heatingIcon.png"; 
+import waste_image from "../../../data/poop.png"; 
 
 class Map extends Component {
     constructor(props) {
@@ -58,11 +60,19 @@ class Map extends Component {
             {name: "energy",
             amount:50,
             y:0,
-            img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            img:heating_image},
             {name: "heating",
             amount:50,
-            y:500,
-            img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
+            y:48,
+            image_y:128,
+            img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            {name: "heating",
+            amount:75,
+            y:96,
+            image_y:256,
+            img:waste_image}
+            // img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
         ]        
     }
 
@@ -683,10 +693,9 @@ class Map extends Component {
             getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
             getText: d =>  d.name + ": " +  d.amount,
             // getText: d =>  "Energy: " +  d.energy,.
-
-            getSize: d => 25,
-            getPixelOffset: [20, 0],
-            getColor: [255, 255, 255],
+            getSize: d => 24,
+            getPixelOffset: d => [20, d.y],
+            getColor:  [156, 107, 44],//[255, 255, 255],
             getBorderColor: [0, 0, 0],
             getBorderWidth: 6,
             OutlineWidth: 10,
@@ -700,10 +709,13 @@ class Map extends Component {
             getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
             pickable: true,
             getIcon: d => ({
+                // url: {return d.img},
                 url: d.img,
+                // url: "https://pngset.com/images/aw-heating-cooling-heat-thermometer-heat-icon-text-number-symbol-label-transparent-png-380083.png",
+                // url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
                 width: 128,
                 height: 128,
-                anchorY: d.y
+                anchorY: -d.image_y
             }),//d.icon,
             // getIcon: d => "shipForward",
             getSize: d => 30,
