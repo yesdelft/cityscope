@@ -37,6 +37,7 @@ import ship_image from "../../../data/AISIcons.png";
 import ships from "../../../data/ships.json"; 
 import heating_image from "../../../data/heatingIcon.png"; 
 import waste_image from "../../../data/poop.png"; 
+import smart_buildings from "../../../data/BAG_WFS_build_4326.geojson"; 
 
 class Map extends Component {
     constructor(props) {
@@ -721,6 +722,46 @@ class Map extends Component {
             getSize: d => 30,
             // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
         }));
+
+        
+        // layers.push(
+        //     new SolidPolygonLayer({
+        //         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
+        //         data:[{polygon: [[4.523021985967453, 51.92077657547447], [4.523023183709508, 51.92077627866481], [4.523040390046194, 51.9207720276727], [4.523103796801922, 51.92075634113758], [4.523110939297128, 51.92075457792882], [4.523121002604995, 51.92075211709586], [4.523129488534569, 51.92075004016897], [4.523147585975468, 51.920745562005905], [4.523164398117351, 51.920741397984926], [4.523154372061224, 51.92072604351117], [4.523159455101577, 51.920724786504664], [4.523215134585583, 51.92071102960806], [4.523233205409467, 51.92073893748721], [4.523214216683051, 51.92074365180674], [4.523236092738546, 51.92077778985136], [4.523159701695709, 51.92079664390733], [4.523190331961749, 51.9208442394592], [4.523177333629125, 51.920847379841504], [4.523184108253133, 51.920857946407], [4.523089750887747, 51.920881252584785], [4.523021985967453, 51.92077657547447]] } ],
+        //         getPolygon: d => d.polygon,
+        //         wireframe:true,
+        //         getFillColor: [0, 105, 18, 0.88*255],
+        //         getLineColor: [0,0,0],
+        //         extruded: false
+        //     })
+        // );
+    
+        
+        layers.push(
+            new GeoJsonLayer({
+                id: 'geojson-layer-smart',
+                data: smart_buildings,
+                pickable: false,
+                stroked: false,
+                filled: true,
+                extruded: true,
+                // wireframe:true,.
+                // pointType: 'circle',
+                // lineWidthScale: 1,
+                // lineWidthMinPixels: 2,
+                // getFillColor: [160, 160, 180, 200],
+                // getLineColor: d => colorToRGBArray(d.properties.color),
+                // getPointRadius: 10,
+                getLineWidth: f => {console.log("im here",f.properties); return 1;},
+                getElevation: f => Math.sqrt(f.properties.bouwjaar - 1873) * 10,
+                // getFillColor: f => [255, 255, (f["properties"]["bouwjaar"] - 1873) / 48 * 255],
+                getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
+                // getFillColor: f => {[0, 0, f.properties.bouwjaar - 1970], //f["properties"]["bouwjaar"]],
+                // getLineColor: [255, 255, 255],
+                // getElevation: 10, 
+                positionFormat:"XYZ"  
+        }));
+     
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
