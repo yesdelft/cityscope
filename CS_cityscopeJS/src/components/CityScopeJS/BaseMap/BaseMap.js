@@ -35,7 +35,6 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
-import complaints from "../../../data/complaints.json"; 
 import complaints_all from "../../../data/complaints_all.json"; 
 
 class Map extends Component {
@@ -680,8 +679,18 @@ class Map extends Component {
                 radiusMaxPixels: 100,
                 lineWidthMinPixels: 1,
                 getPosition: d =>  [d.Lon, d.Lat],
-                getRadius: 6,
-                getFillColor: d => d.Winner === "Complainer" ? [0, 255, 0] : [255, 0, 0],
+                // getRadius: d => d.RentBefore == null ? 12 : parseInt(d.RentBefore / 100 * 10),
+                getRadius: d => 10,
+                getFillColor: d => {
+                    if (d.Winner === "Complainer" && d.Complainer === "Huurder")
+                        return [0, 255, 0];
+                    else if (d.Winner === "Complainer" && d.Complainer === "Verhuurder")
+                        return [255, 0, 0];
+                    else if (d.Winner === "Defendant" && d.Complainer === "Huurder")
+                        return [127, 0, 0];
+                    else
+                        return [0, 127, 0];
+                },
                 getLineColor: d => [0, 0, 0]
             }));
             layers.push(new ScatterplotLayer({
