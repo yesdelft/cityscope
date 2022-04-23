@@ -116,7 +116,7 @@
                                 }
                     },
         "initialViewState": {
-                                "zoom": 17,
+                                "zoom": 9,
                                 "pitch": 0,
                                 "bearing": 0,
                                 "orthographic": true
@@ -125,8 +125,8 @@
                                 "zoom": 13.895,
                                 "pitch": 0,
                                 "rotate": 0.9,
-                                "longitude":  4.4901,
-                                "latitude": 51.91456,
+                                "longitude":  4.523021985967453,
+                                "latitude": 51.92077657547447,
                                 "orthographic": true
                             },
         "main_map_display":{

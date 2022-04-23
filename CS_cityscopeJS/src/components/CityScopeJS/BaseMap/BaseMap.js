@@ -20,7 +20,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
+import {PolygonLayer, SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
@@ -735,8 +735,18 @@ class Map extends Component {
         //         extruded: false
         //     })
         // );
-    
-        
+        const landCover = [
+            [ [ 4.45366, 51.8998 ], [ 4.45366, 51.926761111111119 ], [ 4.5251, 51.926761111111119 ], [ 4.5251, 51.8998 ], [ 4.45366, 51.8998 ] ]
+          ];
+          layers.push(
+          new PolygonLayer({
+            id: 'ground',
+            data: landCover,
+            stroked: false,
+            getPolygon: f => f,
+            getFillColor: [0, 0, 0, 0]
+          }),
+      );
         layers.push(
             new GeoJsonLayer({
                 id: 'geojson-layer-smart',
