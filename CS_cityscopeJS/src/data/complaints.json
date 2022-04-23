@@ -1,6 +1,7 @@
 [
     {
         "Zip": "3081BX",
+        "Winner": "Complainer",
         "End": "BX",
         "Code": 3081,
         "Lat": 51.8913,
@@ -8,6 +9,7 @@
     },
     {
         "Zip": "3082KG",
+        "Winner": "Defendant",
         "End": "KG",
         "Code": 3082,
         "Lat": 51.8904,
@@ -15,6 +17,7 @@
     },
     {
         "Zip": "3073EM",
+        "Winner": "Complainer",
         "End": "EM",
         "Code": 3073,
         "Lat": 51.8945,
@@ -22,6 +25,7 @@
     },
     {
         "Zip": "3072VR",
+        "Winner": "Complainer",
         "End": "VR",
         "Code": 3072,
         "Lat": 51.899,
@@ -29,6 +33,7 @@
     },
     {
         "Zip": "3081RR",
+        "Winner": "Defendant",
         "End": "RR",
         "Code": 3081,
         "Lat": 51.8919,
@@ -36,6 +41,7 @@
     },
     {
         "Zip": "3083LC",
+        "Winner": "Defendant",
         "End": "LC",
         "Code": 3083,
         "Lat": 51.8901,
@@ -43,6 +49,7 @@
     },
     {
         "Zip": "3072NX",
+        "Winner": "Complainer",
         "End": "NX",
         "Code": 3072,
         "Lat": 51.9002,
@@ -50,6 +57,7 @@
     },
     {
         "Zip": "3013AS",
+        "Winner": "Complainer",
         "End": "AS",
         "Code": 3013,
         "Lat": 51.9233,
@@ -57,6 +65,7 @@
     },
     {
         "Zip": "3051GC",
+        "Winner": "Complainer",
         "End": "GC",
         "Code": 3051,
         "Lat": 51.945,
@@ -64,6 +73,7 @@
     },
     {
         "Zip": "3083XP",
+        "Winner": "Defendant",
         "End": "XP",
         "Code": 3083,
         "Lat": 51.8889,
@@ -71,6 +81,7 @@
     },
     {
         "Zip": "3083XP",
+        "Winner": "Defendant",
         "End": "XP",
         "Code": 3083,
         "Lat": 51.8889,
@@ -78,6 +89,7 @@
     },
     {
         "Zip": "3086TA",
+        "Winner": "Complainer",
         "End": "TA",
         "Code": 3086,
         "Lat": 51.8748,
@@ -85,6 +97,7 @@
     },
     {
         "Zip": "3079NC",
+        "Winner": "Complainer",
         "End": "NC",
         "Code": 3079,
         "Lat": 51.8841,
@@ -92,6 +105,7 @@
     },
     {
         "Zip": "3038AN",
+        "Winner": "Complainer",
         "End": "AN",
         "Code": 3038,
         "Lat": 51.9342,
@@ -99,6 +113,7 @@
     },
     {
         "Zip": "3039HB",
+        "Winner": "Defendant",
         "End": "HB",
         "Code": 3039,
         "Lat": 51.9337,
@@ -106,6 +121,7 @@
     },
     {
         "Zip": "3078XG",
+        "Winner": "Complainer",
         "End": "XG",
         "Code": 3078,
         "Lat": 51.892,
@@ -113,6 +129,7 @@
     },
     {
         "Zip": "3034ZD",
+        "Winner": "Defendant",
         "End": "ZD",
         "Code": 3034,
         "Lat": 51.9332,
@@ -120,6 +137,7 @@
     },
     {
         "Zip": "3074EN",
+        "Winner": "Complainer",
         "End": "EN",
         "Code": 3074,
         "Lat": 51.896,
@@ -127,6 +145,7 @@
     },
     {
         "Zip": "3074EN",
+        "Winner": "Complainer",
         "End": "EN",
         "Code": 3074,
         "Lat": 51.896,
@@ -134,6 +153,7 @@
     },
     {
         "Zip": "3051TG",
+        "Winner": "Defendant",
         "End": "TG",
         "Code": 3051,
         "Lat": 51.9427,
@@ -141,6 +161,7 @@
     },
     {
         "Zip": "3062KK",
+        "Winner": "Complainer",
         "End": "KK",
         "Code": 3062,
         "Lat": 51.9224,
@@ -148,6 +169,7 @@
     },
     {
         "Zip": "3068JD",
+        "Winner": "Defendant",
         "End": "JD",
         "Code": 3068,
         "Lat": 51.9591,
@@ -155,6 +177,7 @@
     },
     {
         "Zip": "3027CA",
+        "Winner": "Complainer",
         "End": "CA",
         "Code": 3027,
         "Lat": 51.9139,
@@ -162,6 +185,7 @@
     },
     {
         "Zip": "3027CA",
+        "Winner": "Complainer",
         "End": "CA",
         "Code": 3027,
         "Lat": 51.9139,
@@ -169,6 +193,7 @@
     },
     {
         "Zip": "3027CA",
+        "Winner": "Complainer",
         "End": "CA",
         "Code": 3027,
         "Lat": 51.9139,
@@ -176,6 +201,7 @@
     },
     {
         "Zip": "3027CA",
+        "Winner": "Defendant",
         "End": "CA",
         "Code": 3027,
         "Lat": 51.9139,
@@ -183,6 +209,7 @@
     },
     {
         "Zip": "3027CA",
+        "Winner": "Complainer",
         "End": "CA",
         "Code": 3027,
         "Lat": 51.9139,
@@ -190,6 +217,7 @@
     },
     {
         "Zip": "3082JC",
+        "Winner": "Complainer",
         "End": "JC",
         "Code": 3082,
         "Lat": 51.8903,
@@ -197,6 +225,7 @@
     },
     {
         "Zip": "3079EK",
+        "Winner": "Defendant",
         "End": "EK",
         "Code": 3079,
         "Lat": 51.8803,
@@ -204,6 +233,7 @@
     },
     {
         "Zip": "3076BT",
+        "Winner": "Defendant",
         "End": "BT",
         "Code": 3076,
         "Lat": 51.8817,
@@ -211,6 +241,7 @@
     },
     {
         "Zip": "3035GV",
+        "Winner": "Complainer",
         "End": "GV",
         "Code": 3035,
         "Lat": 51.9341,
@@ -218,6 +249,7 @@
     },
     {
         "Zip": "3031BH",
+        "Winner": "Defendant",
         "End": "BH",
         "Code": 3031,
         "Lat": 51.9243,
@@ -225,6 +257,7 @@
     },
     {
         "Zip": "3062PA",
+        "Winner": "Defendant",
         "End": "PA",
         "Code": 3062,
         "Lat": 51.9165,
@@ -232,6 +265,7 @@
     },
     {
         "Zip": "3022HH",
+        "Winner": "Defendant",
         "End": "HH",
         "Code": 3022,
         "Lat": 51.9188,
@@ -239,6 +273,7 @@
     },
     {
         "Zip": "3014PL",
+        "Winner": "Complainer",
         "End": "PL",
         "Code": 3014,
         "Lat": 51.9176,
@@ -246,6 +281,7 @@
     },
     {
         "Zip": "3067MH",
+        "Winner": "Complainer",
         "End": "MH",
         "Code": 3067,
         "Lat": 51.942,
@@ -253,6 +289,7 @@
     },
     {
         "Zip": "3073DE",
+        "Winner": "Defendant",
         "End": "DE",
         "Code": 3073,
         "Lat": 51.89,
@@ -260,6 +297,7 @@
     },
     {
         "Zip": "3073EW",
+        "Winner": "Complainer",
         "End": "EW",
         "Code": 3073,
         "Lat": 51.8941,
@@ -267,6 +305,7 @@
     },
     {
         "Zip": "3063AZ",
+        "Winner": "Complainer",
         "End": "AZ",
         "Code": 3063,
         "Lat": 51.9187,
@@ -274,6 +313,7 @@
     },
     {
         "Zip": "3071JJ",
+        "Winner": "Complainer",
         "End": "JJ",
         "Code": 3071,
         "Lat": 51.9111,
@@ -281,6 +321,7 @@
     },
     {
         "Zip": "3075CJ",
+        "Winner": "Defendant",
         "End": "CJ",
         "Code": 3075,
         "Lat": 51.8874,
@@ -288,6 +329,7 @@
     },
     {
         "Zip": "3035PH",
+        "Winner": "Complainer",
         "End": "PH",
         "Code": 3035,
         "Lat": 51.9321,
@@ -295,6 +337,7 @@
     },
     {
         "Zip": "3061ZZ",
+        "Winner": "Complainer",
         "End": "ZZ",
         "Code": 3061,
         "Lat": 51.922,
@@ -302,6 +345,7 @@
     },
     {
         "Zip": "3086ER",
+        "Winner": "Defendant",
         "End": "ER",
         "Code": 3086,
         "Lat": 51.8741,
@@ -309,6 +353,7 @@
     },
     {
         "Zip": "3081RW",
+        "Winner": "Complainer",
         "End": "RW",
         "Code": 3081,
         "Lat": 51.8922,
@@ -316,6 +361,7 @@
     },
     {
         "Zip": "3028BH",
+        "Winner": "Defendant",
         "End": "BH",
         "Code": 3028,
         "Lat": 51.9148,
@@ -323,6 +369,7 @@
     },
     {
         "Zip": "3073GE",
+        "Winner": "Complainer",
         "End": "GE",
         "Code": 3073,
         "Lat": 51.8954,
@@ -330,6 +377,7 @@
     },
     {
         "Zip": "3073DX",
+        "Winner": "Defendant",
         "End": "DX",
         "Code": 3073,
         "Lat": 51.8897,
@@ -337,6 +385,7 @@
     },
     {
         "Zip": "3083TG",
+        "Winner": "Complainer",
         "End": "TG",
         "Code": 3083,
         "Lat": 51.8875,
@@ -344,6 +393,7 @@
     },
     {
         "Zip": "3082PH",
+        "Winner": "Complainer",
         "End": "PH",
         "Code": 3082,
         "Lat": 51.8876,
@@ -351,6 +401,7 @@
     },
     {
         "Zip": "3083CG",
+        "Winner": "Defendant",
         "End": "CG",
         "Code": 3083,
         "Lat": 51.8903,
@@ -358,6 +409,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -365,6 +417,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -372,6 +425,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -379,6 +433,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -386,6 +441,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -393,6 +449,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Defendant",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -400,6 +457,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Defendant",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -407,6 +465,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Complainer",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -414,6 +473,7 @@
     },
     {
         "Zip": "3024EB",
+        "Winner": "Defendant",
         "End": "EB",
         "Code": 3024,
         "Lat": 51.9072,
@@ -421,6 +481,7 @@
     },
     {
         "Zip": "3081PB",
+        "Winner": "Defendant",
         "End": "PB",
         "Code": 3081,
         "Lat": 51.8899,
@@ -428,6 +489,7 @@
     },
     {
         "Zip": "3033CH",
+        "Winner": "Complainer",
         "End": "CH",
         "Code": 3033,
         "Lat": 51.927,
@@ -435,6 +497,7 @@
     },
     {
         "Zip": "3083CD",
+        "Winner": "Defendant",
         "End": "CD",
         "Code": 3083,
         "Lat": 51.89,
@@ -442,6 +505,7 @@
     },
     {
         "Zip": "3083CD",
+        "Winner": "Complainer",
         "End": "CD",
         "Code": 3083,
         "Lat": 51.89,
@@ -449,6 +513,7 @@
     },
     {
         "Zip": "3076BZ",
+        "Winner": "Defendant",
         "End": "BZ",
         "Code": 3076,
         "Lat": 51.8813,
@@ -456,6 +521,7 @@
     },
     {
         "Zip": "3027HN",
+        "Winner": "Complainer",
         "End": "HN",
         "Code": 3027,
         "Lat": 51.9144,
@@ -463,6 +529,7 @@
     },
     {
         "Zip": "3024CJ",
+        "Winner": "Defendant",
         "End": "CJ",
         "Code": 3024,
         "Lat": 51.9058,
@@ -470,6 +537,7 @@
     },
     {
         "Zip": "3025RD",
+        "Winner": "Defendant",
         "End": "RD",
         "Code": 3025,
         "Lat": 51.9077,
@@ -477,6 +545,7 @@
     },
     {
         "Zip": "3038JM",
+        "Winner": "Complainer",
         "End": "JM",
         "Code": 3038,
         "Lat": 51.9351,
@@ -484,6 +553,7 @@
     },
     {
         "Zip": "3069WB",
+        "Winner": "Defendant",
         "End": "WB",
         "Code": 3069,
         "Lat": 51.9657,
@@ -491,6 +561,7 @@
     },
     {
         "Zip": "3074ST",
+        "Winner": "Defendant",
         "End": "ST",
         "Code": 3074,
         "Lat": 51.8959,
@@ -498,6 +569,7 @@
     },
     {
         "Zip": "3068EP",
+        "Winner": "Defendant",
         "End": "EP",
         "Code": 3068,
         "Lat": 51.9609,
@@ -505,6 +577,7 @@
     },
     {
         "Zip": "3022XE",
+        "Winner": "Defendant",
         "End": "XE",
         "Code": 3022,
         "Lat": 51.9189,
@@ -512,6 +585,7 @@
     },
     {
         "Zip": "3083PR",
+        "Winner": "Complainer",
         "End": "PR",
         "Code": 3083,
         "Lat": 51.8899,
@@ -519,6 +593,7 @@
     },
     {
         "Zip": "3036VA",
+        "Winner": "Complainer",
         "End": "VA",
         "Code": 3036,
         "Lat": 51.9362,
@@ -526,6 +601,7 @@
     },
     {
         "Zip": "3082XK",
+        "Winner": "Defendant",
         "End": "XK",
         "Code": 3082,
         "Lat": 51.8899,
@@ -533,6 +609,7 @@
     },
     {
         "Zip": "3081RX",
+        "Winner": "Complainer",
         "End": "RX",
         "Code": 3081,
         "Lat": 51.8919,
@@ -540,6 +617,7 @@
     },
     {
         "Zip": "3082GD",
+        "Winner": "Defendant",
         "End": "GD",
         "Code": 3082,
         "Lat": 51.892,
@@ -547,6 +625,7 @@
     },
     {
         "Zip": "3073AN",
+        "Winner": "Complainer",
         "End": "AN",
         "Code": 3073,
         "Lat": 51.8916,
@@ -554,6 +633,7 @@
     },
     {
         "Zip": "3011PJ",
+        "Winner": "Complainer",
         "End": "PJ",
         "Code": 3011,
         "Lat": 51.9223,
@@ -561,6 +641,7 @@
     },
     {
         "Zip": "3038TB",
+        "Winner": "Complainer",
         "End": "TB",
         "Code": 3038,
         "Lat": 51.9362,
@@ -568,6 +649,7 @@
     },
     {
         "Zip": "3037AG",
+        "Winner": "Complainer",
         "End": "AG",
         "Code": 3037,
         "Lat": 51.9401,
@@ -575,6 +657,7 @@
     },
     {
         "Zip": "3037AG",
+        "Winner": "Complainer",
         "End": "AG",
         "Code": 3037,
         "Lat": 51.9401,
@@ -582,6 +665,7 @@
     },
     {
         "Zip": "3037PD",
+        "Winner": "Complainer",
         "End": "PD",
         "Code": 3037,
         "Lat": 51.9375,
@@ -589,6 +673,7 @@
     },
     {
         "Zip": "3037PD",
+        "Winner": "Complainer",
         "End": "PD",
         "Code": 3037,
         "Lat": 51.9375,
@@ -596,6 +681,7 @@
     },
     {
         "Zip": "3083TH",
+        "Winner": "Complainer",
         "End": "TH",
         "Code": 3083,
         "Lat": 51.8869,
@@ -603,6 +689,7 @@
     },
     {
         "Zip": "3077SK",
+        "Winner": "Complainer",
         "End": "SK",
         "Code": 3077,
         "Lat": 51.8945,
@@ -610,6 +697,7 @@
     },
     {
         "Zip": "3077SK",
+        "Winner": "Complainer",
         "End": "SK",
         "Code": 3077,
         "Lat": 51.8945,
@@ -617,6 +705,7 @@
     },
     {
         "Zip": "3074PW",
+        "Winner": "Complainer",
         "End": "PW",
         "Code": 3074,
         "Lat": 51.8921,
@@ -624,6 +713,7 @@
     },
     {
         "Zip": "3025HG",
+        "Winner": "Complainer",
         "End": "HG",
         "Code": 3025,
         "Lat": 51.9094,
@@ -631,6 +721,7 @@
     },
     {
         "Zip": "3021ZS",
+        "Winner": "Complainer",
         "End": "ZS",
         "Code": 3021,
         "Lat": 51.9107,
@@ -638,6 +729,7 @@
     },
     {
         "Zip": "3061KB",
+        "Winner": "Defendant",
         "End": "KB",
         "Code": 3061,
         "Lat": 51.9322,
@@ -645,6 +737,7 @@
     },
     {
         "Zip": "3071AW",
+        "Winner": "Defendant",
         "End": "AW",
         "Code": 3071,
         "Lat": 51.9095,
@@ -652,6 +745,7 @@
     },
     {
         "Zip": "3071AW",
+        "Winner": "Defendant",
         "End": "AW",
         "Code": 3071,
         "Lat": 51.9095,
@@ -659,6 +753,7 @@
     },
     {
         "Zip": "3071AW",
+        "Winner": "Defendant",
         "End": "AW",
         "Code": 3071,
         "Lat": 51.9095,
@@ -666,6 +761,7 @@
     },
     {
         "Zip": "3071HS",
+        "Winner": "Complainer",
         "End": "HS",
         "Code": 3071,
         "Lat": 51.9114,
@@ -673,6 +769,7 @@
     },
     {
         "Zip": "3028EL",
+        "Winner": "Defendant",
         "End": "EL",
         "Code": 3028,
         "Lat": 51.9164,
@@ -680,6 +777,7 @@
     },
     {
         "Zip": "3083DT",
+        "Winner": "Complainer",
         "End": "DT",
         "Code": 3083,
         "Lat": 51.8872,
@@ -687,6 +785,7 @@
     },
     {
         "Zip": "3011XZ",
+        "Winner": "Defendant",
         "End": "XZ",
         "Code": 3011,
         "Lat": 51.9135,
@@ -694,6 +793,7 @@
     },
     {
         "Zip": "3021VJ",
+        "Winner": "Complainer",
         "End": "VJ",
         "Code": 3021,
         "Lat": 51.9173,
@@ -701,6 +801,7 @@
     },
     {
         "Zip": "3083WN",
+        "Winner": "Defendant",
         "End": "WN",
         "Code": 3083,
         "Lat": 51.8881,
@@ -708,6 +809,7 @@
     },
     {
         "Zip": "3032TM",
+        "Winner": "Defendant",
         "End": "TM",
         "Code": 3032,
         "Lat": 51.9307,
@@ -715,6 +817,7 @@
     },
     {
         "Zip": "3022LK",
+        "Winner": "Defendant",
         "End": "LK",
         "Code": 3022,
         "Lat": 51.9186,
@@ -722,6 +825,7 @@
     },
     {
         "Zip": "3083NG",
+        "Winner": "Complainer",
         "End": "NG",
         "Code": 3083,
         "Lat": 51.8877,
@@ -729,6 +833,7 @@
     },
     {
         "Zip": "3083NG",
+        "Winner": "Defendant",
         "End": "NG",
         "Code": 3083,
         "Lat": 51.8877,
@@ -736,6 +841,7 @@
     },
     {
         "Zip": "3014KD",
+        "Winner": "Defendant",
         "End": "KD",
         "Code": 3014,
         "Lat": 51.9211,
@@ -743,6 +849,7 @@
     },
     {
         "Zip": "3067DA",
+        "Winner": "Complainer",
         "End": "DA",
         "Code": 3067,
         "Lat": 51.9451,
@@ -750,6 +857,7 @@
     },
     {
         "Zip": "3022TL",
+        "Winner": "Complainer",
         "End": "TL",
         "Code": 3022,
         "Lat": 51.9174,
@@ -757,6 +865,7 @@
     },
     {
         "Zip": "3011ZP",
+        "Winner": "Complainer",
         "End": "ZP",
         "Code": 3011,
         "Lat": 51.9205,
