@@ -36,6 +36,7 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
 import complaints from "../../../data/complaints.json"; 
+import complaints_all from "../../../data/complaints_all.json"; 
 
 class Map extends Component {
     constructor(props) {
@@ -669,9 +670,9 @@ class Map extends Component {
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'complaints-layer',
-                data: complaints,
+                data: complaints_all,
                 pickable: true,
-                opacity: 0.5,
+                opacity: 0.8,
                 stroked: true,
                 filled: true,
                 radiusScale: 6,
