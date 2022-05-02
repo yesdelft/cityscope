@@ -55,6 +55,7 @@ class Map extends Component {
             testData: ships
         };
         this.animationFrame = null;
+        this.elapsedTime = 0;
     }
 
     componentWillUnmount() {
@@ -327,6 +328,7 @@ class Map extends Component {
         let date = new Date();
         let startDate = new Date(2011,7,5,2,1,1);
         let elapsedSeconds = date - startDate;
+        this.elapsedTime = elapsedSeconds;
         let speed = 0.5;
         elapsedSeconds = Math.floor(elapsedSeconds / (1000 / speed));
         // let elapsedSeconds = date.getSeconds();
@@ -710,14 +712,18 @@ class Map extends Component {
                 // getPointRadius: 10,
                 getLineWidth: f => {console.log("im here",f.properties); return 1;},
                 getElevation: f => Math.sqrt(f.year) * 10,
-                // getFillColor: f => [255, 255, (f["properties"]["bouwjaar"] - 1873) / 48 * 255],
-                // getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
-                // getFillColor: f => {let b = parseInt(f.usage[50]["energy"] * 255); return [255, 255, b]},
-                getFillColor: f => COLOR_SCALE(f.usage[50]["energy"]),
-                // getFillColor: f => {[0, 0, f.properties.bouwjaar - 1970], //f["properties"]["bouwjaar"]],
-                // getLineColor: [255, 255, 255],
-                // getElevation: 10, 
-                positionFormat:"XYZ"  
+                getFillColor: f => {
+                    let speed = 0.3;
+                    let elapsedSeconds = Math.floor(this.elapsedTime / (1000 / speed)) % 100;
+                    return COLOR_SCALE(f.usage[elapsedSeconds]["energy"]);
+                },
+                positionFormat:"XYZ",
+                transitions: {
+                    getFillColor: 500
+                },
+                updateTriggers: {
+                    getFillColor: this.elapsedTime
+                }
         }));
      
         if (this.isMenuToggled("AIS")) {
