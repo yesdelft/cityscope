@@ -709,63 +709,6 @@ class Map extends Component {
             );
         }
 
-
-        layers.push(new IconLayer({
-            id: 'usage-layer-background',
-            data: this.c,
-            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
-            pickable: true,
-            getIcon: d => ({
-                // url: {return d.img},
-                url: d.img,
-                // url: "https://pngset.com/images/aw-heating-cooling-heat-thermometer-heat-icon-text-number-symbol-label-transparent-png-380083.png",
-                // url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
-                width: 768,
-                height: 128,
-                anchorY: -d.image_y,
-                anchorX: 0
-            }),//d.icon,
-            // getIcon: d => "shipForward",
-            getSize: d => 30,
-            // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
-        }));
-
-
-        layers.push(new TextLayer({
-            data: this.b,// [{energy:50}],
-            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
-            getText: d =>  d.name + ": " +  d.amount,
-            // getText: d =>  "Energy: " +  d.energy,.
-            getSize: d => 18,
-            getPixelOffset: d => [64, d.y],
-            getColor:  [0, 0, 0],//[156, 107, 44],//[255, 255, 255],
-            getBorderColor: [0, 0, 0],
-            getBorderWidth: 6,
-            OutlineWidth: 10,
-            getTextAnchor: 'start',
-            getAlignmentBaseline: 'center',
-            sdf: true
-        }));
-        layers.push(new IconLayer({
-            id: 'usage-layer',
-            data: this.b,
-            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
-            pickable: true,
-            getIcon: d => ({
-                // url: {return d.img},
-                url: d.img,
-                // url: "https://pngset.com/images/aw-heating-cooling-heat-thermometer-heat-icon-text-number-symbol-label-transparent-png-380083.png",
-                // url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
-                
-                width: 128,
-                height: 128,
-                anchorY: -d.image_y,
-                anchorX: -32
-            }),//d.icon,
-            // getIcon: d => "shipForward",
-            getSize: d => 30,
-            // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
-        }));
         // layers.push(
         //     new SolidPolygonLayer({
         //         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
