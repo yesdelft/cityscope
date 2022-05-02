@@ -708,7 +708,7 @@ class Map extends Component {
                 getElevation: f => Math.sqrt(f.year) * 10,
                 // getFillColor: f => [255, 255, (f["properties"]["bouwjaar"] - 1873) / 48 * 255],
                 // getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
-                getFillColor: f => {let b = parseInt(f.year * 255); return [255, 255, b]},
+                getFillColor: f => {let b = parseInt(f.usage[50]["energy"] * 255); return [255, 255, b]},
                 // getFillColor: f => {[0, 0, f.properties.bouwjaar - 1970], //f["properties"]["bouwjaar"]],
                 // getLineColor: [255, 255, 255],
                 // getElevation: 10, 
