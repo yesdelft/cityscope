@@ -23,6 +23,7 @@ import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
 import {PolygonLayer, SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
+import {scaleThreshold} from 'd3-scale';
 
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 
@@ -689,6 +690,8 @@ class Map extends Component {
             getFillColor: [0, 0, 0, 0]
           }),
       );
+      const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain)
+        .range(settings.map.layers.campus.range);
         layers.push(
             new GeoJsonLayer({
                 id: 'geojson-layer-smart',
@@ -696,6 +699,7 @@ class Map extends Component {
                 pickable: false,
                 stroked: false,
                 filled: true,
+                opacity: 0.8,
                 extruded: true,
                 // wireframe:true,.
                 // pointType: 'circle',
@@ -708,7 +712,8 @@ class Map extends Component {
                 getElevation: f => Math.sqrt(f.year) * 10,
                 // getFillColor: f => [255, 255, (f["properties"]["bouwjaar"] - 1873) / 48 * 255],
                 // getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
-                getFillColor: f => {let b = parseInt(f.usage[50]["energy"] * 255); return [255, 255, b]},
+                // getFillColor: f => {let b = parseInt(f.usage[50]["energy"] * 255); return [255, 255, b]},
+                getFillColor: f => COLOR_SCALE(f.usage[50]["energy"]),
                 // getFillColor: f => {[0, 0, f.properties.bouwjaar - 1970], //f["properties"]["bouwjaar"]],
                 // getLineColor: [255, 255, 255],
                 // getElevation: 10, 
