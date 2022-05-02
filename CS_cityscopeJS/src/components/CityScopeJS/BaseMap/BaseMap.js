@@ -37,6 +37,8 @@ import ship_image from "../../../data/AISIcons.png";
 import ships from "../../../data/ships.json"; 
 import heating_image from "../../../data/heatingIcon.png"; 
 import waste_image from "../../../data/poop.png"; 
+import label_background from "../../../data/energyLabelBackground.png"; 
+import label_background2 from "../../../data/energyLabelBackground2.png"; 
 import smart_buildings from "../../../data/BAG_WFS_build_4326.geojson"; 
 
 class Map extends Component {
@@ -74,7 +76,27 @@ class Map extends Component {
             image_y:256,
             img:waste_image}
             // img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
-        ]        
+        ];
+        this.c = [
+            {name: "energy",
+            amount:50,
+            y:0,
+            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            img:waste_image},
+            {name: "heating",
+            amount:50,
+            y:48,
+            image_y:128,
+            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
+            img:waste_image},
+            // img:label_background2},
+            {name: "heating",
+            amount:75,
+            y:96,
+            image_y:256,
+            img:label_background}
+            // img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
+        ];
     }
 
     componentWillUnmount() {
@@ -688,15 +710,35 @@ class Map extends Component {
         }
 
 
-        
+        layers.push(new IconLayer({
+            id: 'usage-layer-background',
+            data: this.c,
+            getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
+            pickable: true,
+            getIcon: d => ({
+                // url: {return d.img},
+                url: d.img,
+                // url: "https://pngset.com/images/aw-heating-cooling-heat-thermometer-heat-icon-text-number-symbol-label-transparent-png-380083.png",
+                // url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
+                width: 768,
+                height: 128,
+                anchorY: -d.image_y,
+                anchorX: 0
+            }),//d.icon,
+            // getIcon: d => "shipForward",
+            getSize: d => 30,
+            // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
+        }));
+
+
         layers.push(new TextLayer({
             data: this.b,// [{energy:50}],
             getPosition: d => [4.488433438412744, 51.91953462089146],//[51.91751238031478, 4.524875763152297],//d.coordinates,
             getText: d =>  d.name + ": " +  d.amount,
             // getText: d =>  "Energy: " +  d.energy,.
-            getSize: d => 24,
-            getPixelOffset: d => [20, d.y],
-            getColor:  [156, 107, 44],//[255, 255, 255],
+            getSize: d => 18,
+            getPixelOffset: d => [64, d.y],
+            getColor:  [0, 0, 0],//[156, 107, 44],//[255, 255, 255],
             getBorderColor: [0, 0, 0],
             getBorderWidth: 6,
             OutlineWidth: 10,
@@ -714,16 +756,16 @@ class Map extends Component {
                 url: d.img,
                 // url: "https://pngset.com/images/aw-heating-cooling-heat-thermometer-heat-icon-text-number-symbol-label-transparent-png-380083.png",
                 // url: "https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png",
+                
                 width: 128,
                 height: 128,
-                anchorY: -d.image_y
+                anchorY: -d.image_y,
+                anchorX: -32
             }),//d.icon,
             // getIcon: d => "shipForward",
             getSize: d => 30,
             // getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
         }));
-
-        
         // layers.push(
         //     new SolidPolygonLayer({
         //         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
