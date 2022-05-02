@@ -35,11 +35,8 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
-import heating_image from "../../../data/heatingIcon.png"; 
-import waste_image from "../../../data/poop.png"; 
-import label_background from "../../../data/energyLabelBackground.png"; 
-import label_background2 from "../../../data/energyLabelBackground2.png"; 
 import smart_buildings from "../../../data/BAG_WFS_build_4326.geojson"; 
+import fake_buildings from "../../../data/fakeBuildingData.json"; 
 
 class Map extends Component {
     constructor(props) {
@@ -57,46 +54,6 @@ class Map extends Component {
             testData: ships
         };
         this.animationFrame = null;
-        // this.startTime = new Date();
-        // TextLayer.fontSettings.sdf = true;
-        this.b = [
-            {name: "energy",
-            amount:50,
-            y:0,
-            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
-            img:heating_image},
-            {name: "heating",
-            amount:50,
-            y:48,
-            image_y:128,
-            img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
-            {name: "heating",
-            amount:75,
-            y:96,
-            image_y:256,
-            img:waste_image}
-            // img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
-        ];
-        this.c = [
-            {name: "energy",
-            amount:50,
-            y:0,
-            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
-            img:waste_image},
-            {name: "heating",
-            amount:50,
-            y:48,
-            image_y:128,
-            // img:"https://uxwing.com/wp-content/themes/uxwing/download/08-computers-mobile-hardware/energy.png"},
-            img:waste_image},
-            // img:label_background2},
-            {name: "heating",
-            amount:75,
-            y:96,
-            image_y:256,
-            img:label_background}
-            // img:"https://cdn.advancedheatingandairconditioning.com/wp-content/uploads/Icon-Heating.png"}
-        ];
     }
 
     componentWillUnmount() {
@@ -735,7 +692,7 @@ class Map extends Component {
         layers.push(
             new GeoJsonLayer({
                 id: 'geojson-layer-smart',
-                data: smart_buildings,
+                data: fake_buildings,
                 pickable: false,
                 stroked: false,
                 filled: true,
@@ -748,9 +705,10 @@ class Map extends Component {
                 // getLineColor: d => colorToRGBArray(d.properties.color),
                 // getPointRadius: 10,
                 getLineWidth: f => {console.log("im here",f.properties); return 1;},
-                getElevation: f => Math.sqrt(f.properties.bouwjaar - 1873) * 10,
+                getElevation: f => Math.sqrt(f.year) * 10,
                 // getFillColor: f => [255, 255, (f["properties"]["bouwjaar"] - 1873) / 48 * 255],
-                getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
+                // getFillColor: f => {let b = parseInt((f["properties"]["bouwjaar"] - 1873) / 148 * 255); return [255, 255, b]},
+                getFillColor: f => {let b = parseInt(f.year * 255); return [255, 255, b]},
                 // getFillColor: f => {[0, 0, f.properties.bouwjaar - 1970], //f["properties"]["bouwjaar"]],
                 // getLineColor: [255, 255, 255],
                 // getElevation: 10, 
