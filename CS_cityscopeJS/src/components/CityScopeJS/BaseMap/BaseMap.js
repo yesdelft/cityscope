@@ -668,7 +668,7 @@ class Map extends Component {
             );
         }
 
-        if (this.isMenuToggled("AIS")) {
+        if (this.isMenuToggled("RENT")) {
             layers.push(new IconLayer({
                 id: 'complaints-layer',
                 data: complaints_all,
@@ -684,6 +684,8 @@ class Map extends Component {
                 getColor: d => d.Winner === "Complainer" ? [66, 135, 245] : [255, 0, 0],
                 opacity: 0.5
             }));
+        }
+        if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
                 data: this.state.testData,
