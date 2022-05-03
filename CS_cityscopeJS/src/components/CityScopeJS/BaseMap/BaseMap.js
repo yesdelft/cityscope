@@ -36,6 +36,8 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 import ship_image from "../../../data/AISIcons.png"; 
 import ships from "../../../data/ships.json"; 
 import complaints_all from "../../../data/complaints_all.json"; 
+import building from "../../../data/building.png"; 
+import lawyer from "../../../data/lawyer.png"; 
 
 class Map extends Component {
     constructor(props) {
@@ -667,31 +669,20 @@ class Map extends Component {
         }
 
         if (this.isMenuToggled("AIS")) {
-            layers.push(new ScatterplotLayer({
+            layers.push(new IconLayer({
                 id: 'complaints-layer',
                 data: complaints_all,
+                getPosition: d => [d.Lon, d.Lat],
                 pickable: true,
-                opacity: 0.8,
-                stroked: true,
-                filled: true,
-                radiusScale: 6,
-                radiusMinPixels: 1,
-                radiusMaxPixels: 100,
-                lineWidthMinPixels: 1,
-                getPosition: d =>  [d.Lon, d.Lat],
-                // getRadius: d => d.RentBefore == null ? 12 : parseInt(d.RentBefore / 100 * 10),
-                getRadius: d => 10,
-                getFillColor: d => {
-                    if (d.Winner === "Complainer" && d.Complainer === "Huurder")
-                        return [0, 255, 0];
-                    else if (d.Winner === "Complainer" && d.Complainer === "Verhuurder")
-                        return [255, 0, 0];
-                    else if (d.Winner === "Defendant" && d.Complainer === "Huurder")
-                        return [127, 0, 0];
-                    else
-                        return [0, 127, 0];
-                },
-                getLineColor: d => [0, 0, 0]
+                getIcon: d => ({
+                    url: d.Complainer === "Huurder" ? lawyer : building,
+                    width: 128,
+                    height: 128,
+                    mask: true,
+                }),
+                getSize: d => 30,
+                getColor: d => d.Winner === "Complainer" ? [66, 135, 245] : [255, 0, 0],
+                opacity: 0.5
             }));
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
