@@ -713,7 +713,7 @@ class Map extends Component {
                 getLineWidth: f => {console.log("im here",f.properties); return 1;},
                 getElevation: f => Math.sqrt(f.year) * 10,
                 getFillColor: f => {
-                    let speed = 0.3;
+                    let speed = 0.8;
                     let elapsedSeconds = Math.floor(this.elapsedTime / (1000 / speed)) % 100;
                     return COLOR_SCALE(f.usage[elapsedSeconds]["energy"]);
                 },
