@@ -4,8 +4,8 @@ class Smart:
         def convert_datetime(series):
             return pd.to_datetime(series, format="%Y-%m-%d %H:%M:%S")
         self.energy = pd.read_csv("EUR/Integrated/energy_usages.csv",  parse_dates=["time"], date_parser=convert_datetime, index_col=0)
-        # self.energy["month"] = pd.DatetimeIndex(self.energy.index).month
-        # self.energy["year"] = pd.DatetimeIndex(self.energy.index).year
+        self.energy["month"] = pd.DatetimeIndex(self.energy.index).month
+        self.energy["year"] = pd.DatetimeIndex(self.energy.index).year
 
 
     def monthlySums(self, year):
@@ -17,4 +17,4 @@ class Smart:
 if __name__ == "__main__":
     smart = Smart()
 
-    # print(smart.monthlySums(2019))
+    print(smart.monthlySums(2019))
