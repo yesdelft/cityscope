@@ -38,6 +38,7 @@ import ship_image from "../../../data/AISIcons.png";
 import ships from "../../../data/ships.json"; 
 import smart_buildings from "../../../data/BAG_WFS_build_4326.geojson"; 
 import fake_buildings from "../../../data/fakeBuildingData.json"; 
+import fakeAndRealBuildings from "../../../data/fakeAndRealEnergyData.json"; 
 
 class Map extends Component {
     constructor(props) {
@@ -56,6 +57,7 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this.elapsedTime = 0;
+        // console.log(fakeAndRealBuildings);
     }
 
     componentWillUnmount() {
@@ -697,7 +699,7 @@ class Map extends Component {
         layers.push(
             new GeoJsonLayer({
                 id: 'geojson-layer-smart',
-                data: fake_buildings,
+                data: fakeAndRealBuildings,//fake_buildings,
                 pickable: false,
                 stroked: false,
                 filled: true,
@@ -714,8 +716,13 @@ class Map extends Component {
                 getElevation: f => Math.sqrt(f.year) * 10,
                 getFillColor: f => {
                     let speed = 0.8;
-                    let elapsedSeconds = Math.floor(this.elapsedTime / (1000 / speed)) % 100;
-                    return COLOR_SCALE(f.usage[elapsedSeconds]["energy"]);
+                    let periodInterval = 12; //100
+                    let currentTimePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
+                    // currentTimePoint += 1;
+                    
+                    console.log("id", f.id);
+                    console.log("reading", currentTimePoint);
+                    return COLOR_SCALE(f.usage[currentTimePoint]["energy"]);
                 },
                 positionFormat:"XYZ",
                 transitions: {
