@@ -24,3 +24,7 @@ yarn-error.log*
 .prettierrc
 
 .env
+
+# sensitive files
+src/data/EUR
+src/data/objects

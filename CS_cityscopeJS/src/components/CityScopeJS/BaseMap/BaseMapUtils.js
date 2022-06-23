@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import fakeGeoGrid from "../../../data/yourtest.json";
-import fakeGeoGridGeometry from "../../../data/yourtestgeo.json";
+import fakeGeoGrid from "../../../data/objects/yourtest.json";
+import fakeGeoGridGeometry from "../../../data/objects/yourtestgeo.json";
 
 
 /**

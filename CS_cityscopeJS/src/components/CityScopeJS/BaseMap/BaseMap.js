@@ -31,14 +31,14 @@ import axios from "axios";
 
 // data from externally added json files
 import settings from "../../../settings/settings.json";
-import grid_200_data from "../../../data/grid200_4326.geojson";
+import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
-import ship_image from "../../../data/AISIcons.png"; 
-import ships from "../../../data/ships.json"; 
-import smart_buildings from "../../../data/BAG_WFS_build_4326.geojson"; 
-import fake_buildings from "../../../data/fakeBuildingData.json"; 
-import fakeAndRealBuildings from "../../../data/fakeAndRealEnergyData.json"; 
+import ship_image from "../../../data/images/AISIcons.png"; 
+import ships from "../../../data/objects/ships.json"; 
+import smart_buildings from "../../../data/objects/BAG_WFS_build_4326.geojson"; 
+import fake_buildings from "../../../data/objects/fakeBuildingData.json"; 
+import fakeAndRealBuildings from "../../../data/objects/fakeAndRealEnergyData.json"; 
 
 class Map extends Component {
     constructor(props) {
