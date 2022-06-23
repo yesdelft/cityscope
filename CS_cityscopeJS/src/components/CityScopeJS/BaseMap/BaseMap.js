@@ -35,7 +35,7 @@ import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/images/AISIcons.png"; 
-import ships from "../../../data/images/ships.json"; 
+import ships from "../../../data/objects/ships.json"; 
 import complaints_all from "../../../data/objects/complaints_all.json"; 
 import building from "../../../data/images/building.png"; 
 import lawyer from "../../../data/images/lawyer.png"; 

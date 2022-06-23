@@ -48,6 +48,11 @@
                 "showOnInit": false,
                 "requireModule": false
             },
+            "RENT": {
+                "displayName": "Huur Commissie Complaints",
+                "showOnInit": false,
+                "requireModule": false
+            },
             "AGGREGATED_TRIPS": {
                 "displayName": "Aggregated Trips",
                 "showOnInit": false,
