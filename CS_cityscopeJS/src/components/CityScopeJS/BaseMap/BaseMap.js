@@ -724,8 +724,8 @@ class Map extends Component {
                     let currentTimePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
                     // currentTimePoint += 1;
                     
-                    console.log("id", f.id);
-                    console.log("reading", currentTimePoint);
+                    // console.log("id", f.id);
+                    // console.log("reading", currentTimePoint);
                     return COLOR_SCALE(f.usage[currentTimePoint]["energy"]);
                 },
                 positionFormat:"XYZ",
