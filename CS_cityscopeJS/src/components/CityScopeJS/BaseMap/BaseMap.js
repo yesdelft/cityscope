@@ -38,7 +38,7 @@ import ship_image from "../../../data/images/AISIcons.png";
 import ships from "../../../data/objects/ships.json"; 
 import smart_buildings from "../../../data/objects/BAG_WFS_build_4326.geojson"; 
 import fake_buildings from "../../../data/objects/fakeBuildingData.json"; 
-import fakeAndRealBuildings from "../../../data/objects/fakeAndRealEnergyData.json"; 
+import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json"; 
 
 class Map extends Component {
     constructor(props) {

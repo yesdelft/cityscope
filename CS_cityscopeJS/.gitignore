@@ -27,4 +27,4 @@ yarn-error.log*
 
 # sensitive files
 src/data/EUR
-src/data/objects
+src/data/objects/sensitive
