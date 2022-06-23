@@ -35,7 +35,11 @@ import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
 import ship_image from "../../../data/images/AISIcons.png"; 
-import ships from "../../../data/objects/ships.json"; 
+import ships from "../../../data/images/ships.json"; 
+import complaints_all from "../../../data/objects/complaints_all.json"; 
+import building from "../../../data/images/building.png"; 
+import lawyer from "../../../data/images/lawyer.png"; 
+
 import smart_buildings from "../../../data/objects/BAG_WFS_build_4326.geojson"; 
 import fake_buildings from "../../../data/objects/fakeBuildingData.json"; 
 import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json"; 
@@ -733,6 +737,23 @@ class Map extends Component {
                 }
         }));
      
+        if (this.isMenuToggled("RENT")) {
+            layers.push(new IconLayer({
+                id: 'complaints-layer',
+                data: complaints_all,
+                getPosition: d => [d.Lon, d.Lat],
+                pickable: true,
+                getIcon: d => ({
+                    url: d.Complainer === "Huurder" ? lawyer : building,
+                    width: 128,
+                    height: 128,
+                    mask: true,
+                }),
+                getSize: d => 30,
+                getColor: d => d.Winner === "Complainer" ? [66, 135, 245] : [255, 0, 0],
+                opacity: 0.5
+            }));
+        }
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
