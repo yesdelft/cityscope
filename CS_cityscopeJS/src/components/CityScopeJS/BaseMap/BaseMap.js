@@ -19,7 +19,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
-import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
+import {CesiumIonLoader} from '@loaders.gl/3d-tiles';
+import { TripsLayer , TileLayer, Tile3DLayer } from "@deck.gl/geo-layers";
 import {SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
@@ -858,11 +859,42 @@ class Map extends Component {
         if (this.isMenuToggled("LST"))
         {
         layers.push(
-            new BitmapLayer({
-                id: 'bitmap-layer',
-                bounds: [4.45313, 51.89948, 4.52568, 51.92680 ],
-                image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/LST_jul_21_rotterdam.png'
-                })
+            // new BitmapLayer({
+            //     id: 'bitmap-layer',
+            //     bounds: [4.45313, 51.89948, 4.52568, 51.92680 ],
+            //     image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/LST_jul_21_rotterdam.png'
+            //     })
+            
+            new Tile3DLayer({
+                id: 'tile-3d-layer',
+                // tileset json file url
+                data: 'https://assets.cesium.com/96188/tileset.json',
+                loader: CesiumIonLoader,
+                // https://cesium.com/docs/rest-api/
+                loadOptions: {
+                  'cesium-ion': {accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NjY3NjU0YS0yYTY0LTRhZGMtYmZmZS0zNzc5YzRkMmY5ZDMiLCJpZCI6ODg2NTcsImlhdCI6MTY0OTMyNjA3N30.aEjuNGevi315XYHIeYljHXG4dmlm2CxVeloNfgE6aVE'}
+                },
+                onTilesetLoad: (tileset) => {
+                  // Recenter to cover the tileset
+                  const {cartographicCenter, zoom} = tileset;
+                  this.setState({
+                      viewState: {
+                        ...this.state.viewState,
+                        longitude: cartographicCenter[0],
+                        latitude: cartographicCenter[1],
+                        
+                      }
+
+                  });
+                  console.log(cartographicCenter[0]);
+                },
+                // override scenegraph subLayer prop
+                _subLayerProps: {
+                  scenegraph: {_lighting: 'flat'}
+                }
+              })
+
+
             );
         }
 
