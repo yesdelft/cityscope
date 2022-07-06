@@ -35,8 +35,8 @@ class Smart:
     
 if __name__ == "__main__":
     smart = Smart()
-
-    sums = smart.monthlySums(2019, data_type="solar", sum_col="blinduse_produced(kVARh)")
-    # sums = smart.monthlySums(2019, data_type="solar", sum_col="elec_poduced(kWh)")
+    # print(smart.solar.tail(20))
+    # sums = smart.monthlySums(2020, data_type="solar", sum_col="blinduse_produced(kVARh)")
+    sums = smart.monthlySums(2020, data_type="solar", sum_col="elec_poduced(kWh)")
     print(sums)
     # print(sums["kWh"].mean())

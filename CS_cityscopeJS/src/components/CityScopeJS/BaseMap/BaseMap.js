@@ -736,6 +736,28 @@ class Map extends Component {
                     getFillColor: this.elapsedTime
                 }
         }));
+        if (this.isMenuToggled("CONSTRUCTION_DATE")) {
+            layers.push(
+                new GeoJsonLayer({
+                    id: 'geojson-construction-date-layer',
+                    data: fakeAndRealBuildings,
+                    pickable: false,
+                    stroked: false,
+                    filled: true,
+                    opacity: 0.8,
+                    extruded: true,
+                    getFillColor: f => {
+                        return COLOR_SCALE(f.year);
+                    },
+                    positionFormat:"XYZ",
+                    transitions: {
+                        getFillColor: 500
+                    },
+                    updateTriggers: {
+                        getFillColor: this.elapsedTime
+                    }
+            }));
+        }
      
         if (this.isMenuToggled("RENT")) {
             layers.push(new IconLayer({
