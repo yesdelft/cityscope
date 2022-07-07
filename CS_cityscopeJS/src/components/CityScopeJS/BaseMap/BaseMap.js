@@ -308,7 +308,7 @@ class Map extends Component {
         let dirLightSettings = {
             timestamp: 1554927200000,
             color: [255, 255, 255],
-            intensity: 1.0,
+            intensity: 0,
             _shadow: false,
         };
         const dirLight = new _SunLight(dirLightSettings);
@@ -686,18 +686,18 @@ class Map extends Component {
         //         extruded: false
         //     })
         // );
-        const landCover = [
-            [ [ 4.45366, 51.8998 ], [ 4.45366, 51.926761111111119 ], [ 4.5251, 51.926761111111119 ], [ 4.5251, 51.8998 ], [ 4.45366, 51.8998 ] ]
-          ];
-          layers.push(
-          new PolygonLayer({
-            id: 'ground',
-            data: landCover,
-            stroked: false,
-            getPolygon: f => f,
-            getFillColor: [0, 0, 0, 0]
-          }),
-      );
+    //     const landCover = [
+    //         [ [ 4.45366, 51.8998 ], [ 4.45366, 51.926761111111119 ], [ 4.5251, 51.926761111111119 ], [ 4.5251, 51.8998 ], [ 4.45366, 51.8998 ] ]
+    //       ];
+    //       layers.push(
+    //       new PolygonLayer({
+    //         id: 'ground',
+    //         data: landCover,
+    //         stroked: false,
+    //         getPolygon: f => f,
+    //         getFillColor: [0, 0, 0, 0]
+    //       }),
+    //   );
       const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain)
         .range(settings.map.layers.campus.range);
         layers.push(
@@ -717,7 +717,7 @@ class Map extends Component {
                 // getLineColor: d => colorToRGBArray(d.properties.color),
                 // getPointRadius: 10,
                 getLineWidth: f => {console.log("im here",f.properties); return 1;},
-                getElevation: f => Math.sqrt(f.year) * 10,
+                // getElevation: f => Math.sqrt(f.year) * 10,
                 getFillColor: f => {
                     let speed = 0.8;
                     let periodInterval = 12; //100
@@ -736,6 +736,28 @@ class Map extends Component {
                     getFillColor: this.elapsedTime
                 }
         }));
+        if (this.isMenuToggled("CONSTRUCTION_DATE")) {
+            layers.push(
+                new GeoJsonLayer({
+                    id: 'geojson-construction-date-layer',
+                    data: fakeAndRealBuildings,
+                    pickable: false,
+                    stroked: false,
+                    filled: true,
+                    opacity: 0.8,
+                    extruded: true,
+                    getFillColor: f => {
+                        return COLOR_SCALE(f.year);
+                    },
+                    positionFormat:"XYZ",
+                    transitions: {
+                        getFillColor: 500
+                    },
+                    updateTriggers: {
+                        getFillColor: this.elapsedTime
+                    }
+            }));
+        }
      
         if (this.isMenuToggled("RENT")) {
             layers.push(new IconLayer({
