@@ -146,11 +146,11 @@
                                 "orthographic": true
                             },
         "viewCalibration": {
-                                "zoom": 13.93,
+                                "zoom": 16.155,
                                 "pitch": 0,
-                                "rotate": 0.9,
-                                "longitude":  4.527501148629465,
-                                "latitude": 51.917929801765971,
+                                "rotate": 180,
+                                "longitude":  4.5268,
+                                "latitude": 51.91725,
                                 "orthographic": true
                             },
         "main_map_display":{

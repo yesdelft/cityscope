@@ -309,7 +309,7 @@ class Map extends Component {
             timestamp: 1554927200000,
             color: [255, 255, 255],
             intensity: 1.0,
-            _shadow: true,
+            _shadow: false,
         };
         const dirLight = new _SunLight(dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
@@ -708,7 +708,7 @@ class Map extends Component {
                 stroked: false,
                 filled: true,
                 opacity: 0.8,
-                extruded: true,
+                extruded: false,
                 // wireframe:true,.
                 // pointType: 'circle',
                 // lineWidthScale: 1,
