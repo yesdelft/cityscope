@@ -708,7 +708,7 @@ class Map extends Component {
                 stroked: false,
                 filled: true,
                 opacity: 0.8,
-                extruded: true,
+                extruded: false,
                 // wireframe:true,.
                 // pointType: 'circle',
                 // lineWidthScale: 1,
