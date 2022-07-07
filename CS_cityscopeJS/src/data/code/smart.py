@@ -33,10 +33,18 @@ class Smart:
         monthly_sums["month"] = pd.DatetimeIndex(monthly_sums["time"]).month
         return monthly_sums[return_cols]        
     
+    def monthlyCombinedSums(self, year):
+        energy_sums = self.monthlySums(year, data_type="energy", sum_col="kWh")
+        solar_sums = self.monthlySums(year, data_type="solar", sum_col="elec_poduced(kWh)")
+
+        solar_and_energy_sums = pd.merge(energy_sums, solar_sums,  how='inner', on = ['month','building_name'])
+        solar_and_energy_sums["frac_produced_consumed"] = solar_and_energy_sums["elec_poduced(kWh)"] / solar_and_energy_sums["kWh"]
+        return solar_and_energy_sums
+
+    
 if __name__ == "__main__":
     smart = Smart()
     # print(smart.solar.tail(20))
-    # sums = smart.monthlySums(2020, data_type="solar", sum_col="blinduse_produced(kVARh)")
-    sums = smart.monthlySums(2020, data_type="solar", sum_col="elec_poduced(kWh)")
-    print(sums)
+    solar_and_energy_sums = smart.monthlyCombinedSums(2020)
+    print(solar_and_energy_sums)
     # print(sums["kWh"].mean())
