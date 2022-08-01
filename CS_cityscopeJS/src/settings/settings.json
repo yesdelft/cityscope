@@ -93,7 +93,8 @@
                 "showOnInit": false,
                 "requireModule": false
             }
-        }
+        },
+        "refreshInterval": 2000
     },
 
     "map": {

@@ -11,9 +11,18 @@ import {
     hexToRgb,
 } from "./BaseMapUtils";
 
-import {
-    LabeledIconLayer
-} from "./BaseMapCustomLayers";
+import { 
+    getABMLayer, 
+    getAggregatedTripsLayer,
+    getRentCommissionLayer, 
+    getAISLayer,
+    getLSTLayer,
+    getAQILayer,
+    getCalibrationGridLayer,
+    getTableBoundsLayer,
+    getAccessLayer,
+} from "./Layers/RotterdamLayers";
+
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
@@ -34,11 +43,10 @@ import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
-import ship_image from "../../../data/images/AISIcons.png";
+
 import ships from "../../../data/objects/ships.json";
 import complaints_all from "../../../data/objects/complaints_all.json";
-import building from "../../../data/images/building.png";
-import lawyer from "../../../data/images/lawyer.png";
+
 
 import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json";
 const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain).range(settings.map.layers.campus.range);
@@ -527,134 +535,13 @@ class Map extends Component {
 
         if (this.isMenuToggled("ABM")) {
             layers.push(
-                new TripsLayer({
-                    id: "ABM",
-                    visible: this.isMenuToggled("ABM"),
-                    data: cityioFakeABMData.trips,
-                    getPath: (d) => d.path,
-                    getTimestamps: (d) => d.timestamps,
-                    getColor: (d) => {
-                        let col = _hexToRgb(
-                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
-                        );
-                        return col;
-                    },
-
-                    getWidth: 2,
-                    widthScale: this._remapValues(zoomLevel),
-                    opacity: 0.8,
-                    rounded: true,
-                    trailLength: 500,
-                    currentTime: this.props.sliders.time[1],
-
-                    updateTriggers: {
-                        getColor: ABMmode,
-                    },
-                    transitions: {
-                        getColor: 500,
-                    },
-                })
+                getABMLayer(cityioFakeABMData, this.isMenuToggled("ABM"), this._remapValues(zoomLevel), this.props.sliders.time[1], ABMmode)
             );
         }
 
         if (this.isMenuToggled("AGGREGATED_TRIPS")) {
             layers.push(
-                new PathLayer({
-                    id: "AGGREGATED_TRIPS",
-                    visible: this.isMenuToggled("AGGREGATED_TRIPS"),
-                    _shadow: false,
-                    data: cityioFakeABMData.trips,
-                    getPath: (d) => {
-                        const noisePath =
-                            Math.random() < 0.5
-                                ? Math.random() * 0.00005
-                                : Math.random() * -0.00005;
-                        for (let i in d.path) {
-                            d.path[i][0] = d.path[i][0] + noisePath;
-                            d.path[i][1] = d.path[i][1] + noisePath;
-                            d.path[i][2] = d.mode[0] * 2;
-                        }
-                        return d.path;
-                    },
-                    getColor: (d) => {
-                        let col = _hexToRgb(
-                            cityioFakeABMData.attr[ABMmode][d[ABMmode]].color
-                        );
-                        return col;
-                    },
-                    opacity: 0.2,
-                    getWidth: 1.5,
-
-                    updateTriggers: {
-                        getColor: ABMmode,
-                    },
-                    transitions: {
-                        getColor: 500,
-                    },
-                })
-            );
-        }
-
-        if (this.isMenuToggled("GRID")) {
-            layers.push(
-                new GeoJsonLayer({
-                    id: "GRID",
-                    data: this.state.GEOGRID,
-                    visible: this.isMenuToggled("GRID"),
-                    pickable: true,
-                    extruded: true,
-                    wireframe: true,
-                    lineWidthScale: 1,
-                    lineWidthMinPixels: 2,
-                    getElevation: (d) => d.properties.height,
-                    getFillColor: (d) => d.properties.color,
-
-                    onClick: (event) => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleGridcellEditing(event);
-                    },
-
-                    onDrag: (event) => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleGridcellEditing(event);
-                    },
-
-                    onDragStart: () => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this.setState({ draggingWhileEditing: true });
-                        }
-                    },
-
-                    onHover: (e) => {
-                        if (e.object) {
-                            this.setState({ hoveredObj: e });
-                        }
-                    },
-
-                    onDragEnd: () => {
-                        this.setState({ draggingWhileEditing: false });
-                    },
-                    updateTriggers: {
-                        getFillColor: this.state.selectedCellsState,
-                        getElevation: this.state.selectedCellsState,
-                    },
-                    transitions: {
-                        getFillColor: 500,
-                        getElevation: 500,
-                    },
-                })
+                getAggregatedTripsLayer(cityioFakeABMData, this.isMenuToggled("AGGREGATED_TRIPS"), ABMmode)
             );
         }
 
@@ -714,145 +601,44 @@ class Map extends Component {
         }
 
         if (this.isMenuToggled("RENT")) {
-            layers.push(new IconLayer({
-                id: 'complaints-layer',
-                data: complaints_all,
-                getPosition: d => [d.Lon, d.Lat],
-                pickable: true,
-                getIcon: d => ({
-                    url: d.Complainer === "Huurder" ? lawyer : building,
-                    width: 128,
-                    height: 128,
-                    mask: true,
-                }),
-                getSize: d => 30,
-                getColor: d => d.Winner === "Complainer" ? [66, 135, 245] : [255, 0, 0],
-                opacity: 0.5
-            }));
+            layers.push(
+                getRentCommissionLayer(complaints_all)
+            );
         }
+
         if (this.isMenuToggled("AIS")) {
-            layers.push(new ScatterplotLayer({
-                id: 'ship-target-layer',
-                data: this.state.shipData,
-                pickable: true,
-                opacity: 0.002,
-                stroked: true,
-                filled: true,
-                radiusScale: 6,
-                radiusMinPixels: 1,
-                radiusMaxPixels: 100,
-                lineWidthMinPixels: 1,
-                getPosition: d => d.coordinates,
-                getRadius: d => 2,
-                getFillColor: d => [255, 140, 0],
-                getLineColor: d => [0, 0, 0]
-            }));
-
-            layers.push(new LabeledIconLayer({
-                id: 'ship-layer',
-                data: this.state.shipData,
-                pickable: true,
-                getPosition: d => d.coordinates,
-                getText: d => d.name,
-                getTextSize: d => 16,
-                getTextPixelOffset: [10, 10],
-                getTextColor: [255, 255, 255],
-                getTextBorderColor: [0, 0, 0],
-                getTextBorderWidth: 6,
-                textOutlineWidth: 10,
-                getTextAngle: d => 0,
-                getTextAnchor: 'start',
-                getTextAlignmentBaseline: 'top',
-
-                iconAtlas: ship_image,
-                iconMapping: { shipForward: { x: 100, y: 1, width: 13, height: 20, mask: true } },
-                getIcon: d => d.icon,
-                getIconAngle: d => d.heading,
-                getIconSize: d => 30,
-                getIconColor: d => d.hasOwnProperty("color") ? d.color : [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
-                transitions: {
-                    getPosition: {
-                        duration: 7500
-                    },
-                    getAngle: {
-                        duration: 1000
-                    }
-                }
-            }).renderLayers());
+            layers.push(
+                ...getAISLayer(this.state.shipData)
+            );
         }
         if (this.isMenuToggled("Bounds")) {
             layers.push(
-                new SolidPolygonLayer({
-                    // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
-                    data: [{ polygon: [[4.45366, 51.8998], [4.45366, 51.926761111111119], [4.5251, 51.926761111111119], [4.5251, 51.8998], [4.45366, 51.8998]] }],
-                    getPolygon: d => d.polygon,
-                    wireframe: true,
-                    getFillColor: [0, 105, 18, 0.88 * 255],
-                    getLineColor: [0, 0, 0],
-                    extruded: false
-                })
+                getTableBoundsLayer()
             );
         }
 
         if (this.isMenuToggled("ACCESS")) {
             layers.push(
-                new HeatmapLayer({
-                    id: "ACCESS",
-                    visible: this.isMenuToggled("ACCESS"),
-                    colorRange: settings.map.layers.heatmap.colors,
-                    radiusPixels: 200,
-                    opacity: 0.25,
-                    data: this.state.access,
-                    getPosition: (d) => d.coordinates,
-                    getWeight: (d) => d.values[this.props.accessToggle],
-                    updateTriggers: {
-                        getWeight: [this.props.accessToggle],
-                    },
-                })
+                getAccessLayer(this.state.access, this.isMenuToggled("ACCESS"), settings.map.layers.heatmap.colors, this.props.accessToggle)
             );
         }
 
         if (this.isMenuToggled("LST")) {
             layers.push(
-                new BitmapLayer({
-                    id: 'bitmap-layer',
-                    bounds: [4.45313, 51.89948, 4.52568, 51.92680],
-                    image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/LST_jul_21_rotterdam.png'
-                })
+                getLSTLayer()
             );
         }
 
         if (!this.isMenuToggled("LST") && this.isMenuToggled("AQI")) {
             layers.push(
-                new BitmapLayer({
-                    id: 'bitmap-layer',
-                    bounds: [4.45313, 51.89948, 4.52568, 51.92680],
-                    image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/Air_quality_27_aug_21.png'
-                })
+                getAQILayer()
             );
 
         }
 
         if (this.isMenuToggled("calibrationGridLayer")) {
             layers.push(
-                // attempt with  GeoJSON layer
-                new GeoJsonLayer({
-                    id: 'geojson-layer',
-                    data: grid_200_data,
-                    pickable: false,
-                    stroked: false,
-                    filled: false,
-                    extruded: false,
-                    wireframe: true,
-                    pointType: 'circle',
-                    lineWidthScale: 1,
-                    lineWidthMinPixels: 2,
-                    getFillColor: [160, 160, 180, 200],
-                    // getLineColor: d => colorToRGBArray(d.properties.color),
-                    getPointRadius: 10,
-                    getLineWidth: 5,
-                    getElevation: 10
-                })
+                getCalibrationGridLayer(grid_200_data)
             );
         }
 
