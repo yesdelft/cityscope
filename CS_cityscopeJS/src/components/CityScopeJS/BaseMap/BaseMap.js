@@ -19,11 +19,11 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
-import { TripsLayer , TileLayer } from "@deck.gl/geo-layers";
-import {PolygonLayer, SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer} from '@deck.gl/layers';
+import { TripsLayer, TileLayer } from "@deck.gl/geo-layers";
+import { PolygonLayer, SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer } from '@deck.gl/layers';
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
-import {scaleThreshold} from 'd3-scale';
+import { scaleThreshold } from 'd3-scale';
 
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 
@@ -34,15 +34,14 @@ import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 // import ship_image from "../../../data/shipAtlas.png"; 
-import ship_image from "../../../data/images/AISIcons.png"; 
-import ships from "../../../data/objects/ships.json"; 
-import complaints_all from "../../../data/objects/complaints_all.json"; 
-import building from "../../../data/images/building.png"; 
-import lawyer from "../../../data/images/lawyer.png"; 
+import ship_image from "../../../data/images/AISIcons.png";
+import ships from "../../../data/objects/ships.json";
+import complaints_all from "../../../data/objects/complaints_all.json";
+import building from "../../../data/images/building.png";
+import lawyer from "../../../data/images/lawyer.png";
 
-import smart_buildings from "../../../data/objects/BAG_WFS_build_4326.geojson"; 
-import fake_buildings from "../../../data/objects/fakeBuildingData.json"; 
-import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json"; 
+import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json";
+const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain).range(settings.map.layers.campus.range);
 
 class Map extends Component {
     constructor(props) {
@@ -56,12 +55,11 @@ class Map extends Component {
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
-            remoteMenu: {toggles: []},
-            testData: ships
+            remoteMenu: { toggles: [] },
+            shipData: ships
         };
         this.animationFrame = null;
         this.elapsedTime = 0;
-        // console.log(fakeAndRealBuildings);
     }
 
     componentWillUnmount() {
@@ -109,7 +107,7 @@ class Map extends Component {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
         }
-        // console.log("current props ", this.props.menu)
+
         // toggle REMOTE UI
         if (
             !prevProps.menu.includes("REMOTE") &&
@@ -204,30 +202,25 @@ class Map extends Component {
         this.setState({ viewState });
     };
 
-    
+
     getUIData = (URL) => {
         axios
             .get(URL)
             .then((response) => {
-                // put response to state obj
-                // console.log("receiving UI data:", response.data);
-                // let payload = ui_control;
                 let payload = response.data;
                 let previousMenu = this.state.remoteMenu;
                 if (
-                    !previousMenu.toggles.includes("ABM") && 
+                    !previousMenu.toggles.includes("ABM") &&
                     payload.toggles.includes("ABM")
                 ) {
                     this.setState({ remoteAnimateABM: true });
-                    // console.log("setting remote anime true");
                 } else if (
-                    previousMenu.toggles.includes("ABM") && 
+                    previousMenu.toggles.includes("ABM") &&
                     !payload.toggles.includes("ABM")
                 ) {
                     this.setState({ remoteAnimateABM: false });
-                    // console.log("setting remote anime false");
                 }
-                this.setState({ remoteMenu: payload}); 
+                this.setState({ remoteMenu: payload });
             })
 
             .catch((error) => {
@@ -249,23 +242,20 @@ class Map extends Component {
                 console.log("request config:", error.config);
             });
     };
-	
+
     handleUIURL = () => {
-        // let cityioURL = "https://cityio.media.mit.edu/api/table/yourtest/access";
-        // let cityioURL = "https://reqres.in/api/users/2";
         let cityioURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
-		this.getUIData(cityioURL)
-		let interval = 2000
+        this.getUIData(cityioURL)
         // and every interval
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
                 this.getUIData(cityioURL)
             }
-        }, interval);
+        }, settings.menu.refreshInterval);
         console.log(
-            "starting UI GET interval every " +
-                interval +
-                "ms "
+            "starting Remote UI GET interval every " +
+            settings.menu.refreshInterval +
+            "ms "
         );
     };
 
@@ -332,14 +322,14 @@ class Map extends Component {
     };
     _updateShipMovement = () => {
         let date = new Date();
-        let startDate = new Date(2011,7,5,2,1,1);
+        let startDate = new Date(2011, 7, 5, 2, 1, 1);
         let elapsedSeconds = date - startDate;
         this.elapsedTime = elapsedSeconds;
         let speed = 0.5;
         elapsedSeconds = Math.floor(elapsedSeconds / (1000 / speed));
         // let elapsedSeconds = date.getSeconds();
-        let items = [...this.state.testData];
-        for (var i=0; i<items.length; i++) {
+        let items = [...this.state.shipData];
+        for (var i = 0; i < items.length; i++) {
             let step = elapsedSeconds % items[i].route.length;
             let pingOrPong = Math.floor(elapsedSeconds / items[i].route.length) % 2;
             if (pingOrPong == 1) {
@@ -347,13 +337,13 @@ class Map extends Component {
             }
             let latitude = items[i].route[step][0];
             let longitude = items[i].route[step][1];
-            
+
             let newLatitude = items[i].route[step][0] * Math.PI / 180;
             let newLongitude = items[i].route[step][1] * Math.PI / 180;
             let previousStep = 0;
             if (step > 0 && pingOrPong == 0) {
                 previousStep = step - 1
-            }else if (pingOrPong == 1) {
+            } else if (pingOrPong == 1) {
                 previousStep = items[i].route.length - 1;
                 if (step != previousStep) {
                     previousStep = step + 1;
@@ -361,7 +351,7 @@ class Map extends Component {
             }
             let previousLat = items[i].route[previousStep][0] * Math.PI / 180;
             let previousLon = items[i].route[previousStep][1] * Math.PI / 180;
-            
+
             let deltaLon = newLongitude - previousLon;
             let deltaLat = newLatitude - previousLat;
             // think about extracting into separate lib or services folder
@@ -379,7 +369,7 @@ class Map extends Component {
             }
             items[i] = item
         }
-        this.setState({testData: items})
+        this.setState({ shipData: items })
     };
 
     _animate() {
@@ -387,21 +377,17 @@ class Map extends Component {
             let bearing = this.state.viewState.bearing
                 ? this.state.viewState.bearing
                 : 0;
-            bearing < 360 ? (bearing += 0.05) : (bearing = 0);    
+            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
             this.setState({
                 viewState: {
                     ...this.state.viewState,
                     bearing: bearing,
-                },    
-            });    
-        }    
+                },
+            });
+        }
 
-        
-        
-        
         let controlRemotely = this.state.controlRemotely
-        let remote = this.state.remoteMenu;
-        // console.log("calling animate state:", this.state.menu)
+
         if (this.isMenuToggled("AIS")) {
             this._updateShipMovement();
         }
@@ -538,9 +524,6 @@ class Map extends Component {
         const { cityioData, selectedType, menu, ABMmode } = this.props;
 
         let layers = [];
-        
-        let remote = this.state.remoteMenu;
-        let controlRemotely = this.state.controlRemotely;
 
         if (this.isMenuToggled("ABM")) {
             layers.push(
@@ -561,7 +544,7 @@ class Map extends Component {
                     widthScale: this._remapValues(zoomLevel),
                     opacity: 0.8,
                     rounded: true,
-                    trailLength: 500 ,
+                    trailLength: 500,
                     currentTime: this.props.sliders.time[1],
 
                     updateTriggers: {
@@ -675,35 +658,10 @@ class Map extends Component {
             );
         }
 
-        // layers.push(
-        //     new SolidPolygonLayer({
-        //         // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
-        //         data:[{polygon: [[4.523021985967453, 51.92077657547447], [4.523023183709508, 51.92077627866481], [4.523040390046194, 51.9207720276727], [4.523103796801922, 51.92075634113758], [4.523110939297128, 51.92075457792882], [4.523121002604995, 51.92075211709586], [4.523129488534569, 51.92075004016897], [4.523147585975468, 51.920745562005905], [4.523164398117351, 51.920741397984926], [4.523154372061224, 51.92072604351117], [4.523159455101577, 51.920724786504664], [4.523215134585583, 51.92071102960806], [4.523233205409467, 51.92073893748721], [4.523214216683051, 51.92074365180674], [4.523236092738546, 51.92077778985136], [4.523159701695709, 51.92079664390733], [4.523190331961749, 51.9208442394592], [4.523177333629125, 51.920847379841504], [4.523184108253133, 51.920857946407], [4.523089750887747, 51.920881252584785], [4.523021985967453, 51.92077657547447]] } ],
-        //         getPolygon: d => d.polygon,
-        //         wireframe:true,
-        //         getFillColor: [0, 105, 18, 0.88*255],
-        //         getLineColor: [0,0,0],
-        //         extruded: false
-        //     })
-        // );
-    //     const landCover = [
-    //         [ [ 4.45366, 51.8998 ], [ 4.45366, 51.926761111111119 ], [ 4.5251, 51.926761111111119 ], [ 4.5251, 51.8998 ], [ 4.45366, 51.8998 ] ]
-    //       ];
-    //       layers.push(
-    //       new PolygonLayer({
-    //         id: 'ground',
-    //         data: landCover,
-    //         stroked: false,
-    //         getPolygon: f => f,
-    //         getFillColor: [0, 0, 0, 0]
-    //       }),
-    //   );
-      const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain)
-        .range(settings.map.layers.campus.range);
         layers.push(
             new GeoJsonLayer({
                 id: 'geojson-layer-smart',
-                data: fakeAndRealBuildings,//fake_buildings,
+                data: fakeAndRealBuildings,
                 pickable: false,
                 stroked: false,
                 filled: true,
@@ -716,49 +674,45 @@ class Map extends Component {
                 // getFillColor: [160, 160, 180, 200],
                 // getLineColor: d => colorToRGBArray(d.properties.color),
                 // getPointRadius: 10,
-                getLineWidth: f => {console.log("im here",f.properties); return 1;},
-                // getElevation: f => Math.sqrt(f.year) * 10,
+                getLineWidth: f => { console.log("im here", f.properties); return 1; },
                 getFillColor: f => {
                     let speed = 0.8;
                     let periodInterval = 12; //100
                     let currentTimePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
                     // currentTimePoint += 1;
-                    
+
                     // console.log("id", f.id);
                     // console.log("reading", currentTimePoint);
                     return COLOR_SCALE(f.usage[currentTimePoint]["energy"]);
                 },
-                positionFormat:"XYZ",
+                positionFormat: "XYZ",
                 transitions: {
                     getFillColor: 500
                 },
                 updateTriggers: {
                     getFillColor: this.elapsedTime
                 }
-        }));
+            }));
+
         if (this.isMenuToggled("CONSTRUCTION_DATE")) {
             layers.push(
                 new GeoJsonLayer({
                     id: 'geojson-construction-date-layer',
                     data: fakeAndRealBuildings,
-                    pickable: false,
-                    stroked: false,
-                    filled: true,
                     opacity: 0.8,
-                    extruded: true,
                     getFillColor: f => {
                         return COLOR_SCALE(f.year);
                     },
-                    positionFormat:"XYZ",
+                    positionFormat: "XYZ",
                     transitions: {
                         getFillColor: 500
                     },
                     updateTriggers: {
-                        getFillColor: this.elapsedTime
+                        getFillColor: fakeAndRealBuildings
                     }
-            }));
+                }));
         }
-     
+
         if (this.isMenuToggled("RENT")) {
             layers.push(new IconLayer({
                 id: 'complaints-layer',
@@ -779,7 +733,7 @@ class Map extends Component {
         if (this.isMenuToggled("AIS")) {
             layers.push(new ScatterplotLayer({
                 id: 'ship-target-layer',
-                data: this.state.testData,
+                data: this.state.shipData,
                 pickable: true,
                 opacity: 0.002,
                 stroked: true,
@@ -796,7 +750,7 @@ class Map extends Component {
 
             layers.push(new LabeledIconLayer({
                 id: 'ship-layer',
-                data: this.state.testData,
+                data: this.state.shipData,
                 pickable: true,
                 getPosition: d => d.coordinates,
                 getText: d => d.name,
@@ -810,8 +764,8 @@ class Map extends Component {
                 getTextAnchor: 'start',
                 getTextAlignmentBaseline: 'top',
 
-                iconAtlas: ship_image,         
-                iconMapping:  {shipForward: {x: 100, y: 1, width: 13, height: 20, mask: true}}, 
+                iconAtlas: ship_image,
+                iconMapping: { shipForward: { x: 100, y: 1, width: 13, height: 20, mask: true } },
                 getIcon: d => d.icon,
                 getIconAngle: d => d.heading,
                 getIconSize: d => 30,
@@ -827,16 +781,16 @@ class Map extends Component {
             }).renderLayers());
         }
         if (this.isMenuToggled("Bounds")) {
-                layers.push(
-                    new SolidPolygonLayer({
-                        // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
-                        data:[{polygon: [ [ 4.45366, 51.8998 ], [ 4.45366, 51.926761111111119 ], [ 4.5251, 51.926761111111119 ], [ 4.5251, 51.8998 ], [ 4.45366, 51.8998 ] ] } ],
-                        getPolygon: d => d.polygon,
-                        wireframe:true,
-                        getFillColor: [0, 105, 18, 0.88*255],
-                        getLineColor: [0,0,0],
-                        extruded: false
-                    })
+            layers.push(
+                new SolidPolygonLayer({
+                    // data: "E:/TU_Delft/job_hunt/YES_Delft/CityScope/datasets/layers/shp/cityScope_rotterdam_aoi_4326.geojson" ,
+                    data: [{ polygon: [[4.45366, 51.8998], [4.45366, 51.926761111111119], [4.5251, 51.926761111111119], [4.5251, 51.8998], [4.45366, 51.8998]] }],
+                    getPolygon: d => d.polygon,
+                    wireframe: true,
+                    getFillColor: [0, 105, 18, 0.88 * 255],
+                    getLineColor: [0, 0, 0],
+                    extruded: false
+                })
             );
         }
 
@@ -850,65 +804,36 @@ class Map extends Component {
                     opacity: 0.25,
                     data: this.state.access,
                     getPosition: (d) => d.coordinates,
-                    getWeight: (d) => d.values[this.props.accessToggle] ,
+                    getWeight: (d) => d.values[this.props.accessToggle],
                     updateTriggers: {
                         getWeight: [this.props.accessToggle],
                     },
                 })
-                
-                
-            
             );
         }
 
-        if (this.isMenuToggled("LST"))
-        {
-        layers.push(
-            new BitmapLayer({
-                id: 'bitmap-layer',
-                bounds: [4.45313, 51.89948, 4.52568, 51.92680 ],
-                image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/LST_jul_21_rotterdam.png'
+        if (this.isMenuToggled("LST")) {
+            layers.push(
+                new BitmapLayer({
+                    id: 'bitmap-layer',
+                    bounds: [4.45313, 51.89948, 4.52568, 51.92680],
+                    image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/LST_jul_21_rotterdam.png'
                 })
             );
         }
 
         if (!this.isMenuToggled("LST") && this.isMenuToggled("AQI")) {
-        layers.push(
-                    // new TileLayer(
-                    //         {
-                    //         // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
-                    //         // data: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    //         data:'https://tiles.aqicn.org/tiles/usepa-aqi/{z}/{x}/{y}.png?token=3454bbc02f7eebeb38b79939a23b4bcef9268b48',
-                    //         // 'https://tiles.breezometer.com/v1/air-quality/pm25/current-conditions/{z}/{x}/{y}.png?key=5b35d0877bd4470a8bc2621b9f05242e',
-                    //         minZoom: 0,
-                    //         maxZoom: 22,
-                    //         tileSize: 256,
-                        
-                    //         renderSubLayers: props => 
-                    //         {
-                    //             const {
-                    //                     bbox: {west, south, east, north}
-                    //                    } = props.tile;
-                            
-                    //             return new BitmapLayer(props, {
-                    //                                             data: null,
-                    //                                             image: props.data,
-                    //                                             bounds: [west, south, east, north]
-                    //                                            });
-                    //         }
-                    //       }
-                    // )
-                    new BitmapLayer({
-                        id: 'bitmap-layer',
-                        bounds: [4.45313, 51.89948, 4.52568, 51.92680 ],
-                        image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/Air_quality_27_aug_21.png'
-                        })
-                    ); 
-                    
+            layers.push(
+                new BitmapLayer({
+                    id: 'bitmap-layer',
+                    bounds: [4.45313, 51.89948, 4.52568, 51.92680],
+                    image: 'https://raw.githubusercontent.com/pratyush1611/testDatasetCityScope/main/Air_quality_27_aug_21.png'
+                })
+            );
+
         }
 
-        if (this.isMenuToggled("calibrationGridLayer")) 
-        {   
+        if (this.isMenuToggled("calibrationGridLayer")) {
             layers.push(
                 // attempt with  GeoJSON layer
                 new GeoJsonLayer({
@@ -918,7 +843,7 @@ class Map extends Component {
                     stroked: false,
                     filled: false,
                     extruded: false,
-                    wireframe:true,
+                    wireframe: true,
                     pointType: 'circle',
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
@@ -927,9 +852,9 @@ class Map extends Component {
                     getPointRadius: 10,
                     getLineWidth: 5,
                     getElevation: 10
-                  })
-             );
-        }   
+                })
+            );
+        }
 
         return layers;
     }
