@@ -18,9 +18,9 @@ export function getConstructionDateLayer(data, colorScale) {
     });
 }
 
-export function getEnergyUsageLayer(data, colorScale, timePoint) {
+export function getBuildingMetricLayer(metric, data, colorScale, timePoint) {
     return new GeoJsonLayer({
-        id: 'geojson-layer-smart',
+        id: metric + 'geojson-layer-smart',
         data: data,
         stroked: false,
         filled: true,
@@ -28,6 +28,7 @@ export function getEnergyUsageLayer(data, colorScale, timePoint) {
         extruded: false,
         getLineWidth: f => { return 1; },
         getFillColor: f => {
+            // console.log("Im filling ", timePoint, f.usage[timePoint]["energy"]);
             return colorScale(f.usage[timePoint]["energy"]);
         },
         positionFormat: "XYZ",

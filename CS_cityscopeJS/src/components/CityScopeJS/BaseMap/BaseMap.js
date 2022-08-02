@@ -23,7 +23,7 @@ import {
     getAccessLayer,
 } from "./Layers/RotterdamLayers";
 import {
-    getConstructionDateLayer, getEnergyUsageLayer,
+    getConstructionDateLayer, getBuildingMetricLayer,
 } from "./Layers/CampusLayers";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -45,6 +45,7 @@ import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
 import ships from "../../../data/objects/ships.json";
 import complaints_all from "../../../data/objects/complaints_all.json";
 import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json";
+import solarUsageBuildings from "../../../data/objects/sensitive/fakeAndRealSolarData.json";
 
 class Map extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class Map extends Component {
             pickingRadius: 40,
             viewState: settings.map.viewCalibration,
             controlRemotely: true,
-            remoteMenu: { toggles: [] },
+            remoteMenu: { toggles: [], sliders: {energy: 0, solar: 0} },
             shipData: ships
         };
         this.animationFrame = null;
@@ -225,6 +226,7 @@ class Map extends Component {
                     this.setState({ remoteAnimateABM: false });
                 }
                 this.setState({ remoteMenu: payload });
+                console.log("Retrieved remote UI: ", payload);
             })
 
             .catch((error) => {
@@ -248,12 +250,12 @@ class Map extends Component {
     };
 
     handleUIURL = () => {
-        let cityioURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
-        this.getUIData(cityioURL)
+        let remoteMenuURL = "https://cs-menu-default-rtdb.europe-west1.firebasedatabase.app/menuItems.json";
+        this.getUIData(remoteMenuURL)
         // and every interval
         this.timer = setInterval(() => {
             if (this._isMounted && this.state.controlRemotely) {
-                this.getUIData(cityioURL)
+                this.getUIData(remoteMenuURL)
             }
         }, settings.menu.refreshInterval);
         console.log(
@@ -523,14 +525,20 @@ class Map extends Component {
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
         let layers = [];
-
-        let speed = 0.8;
-        let periodInterval = 12; //100
-        let timePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
-        layers.push(
-            getEnergyUsageLayer(fakeAndRealBuildings, this.COLOR_SCALE, timePoint)
-        );
-
+        
+        if (this.isMenuToggled("ENERGY")) {
+            let energyTimePoint = this.state.remoteMenu.sliders.energy;
+            layers.push(
+                getBuildingMetricLayer("energy", fakeAndRealBuildings, this.COLOR_SCALE, energyTimePoint)
+            );
+        }
+        
+        if (this.isMenuToggled("SOLAR")) {
+            let solarTimePoint = this.state.remoteMenu.sliders.solar;
+            layers.push(
+                getBuildingMetricLayer("solar", solarUsageBuildings, this.COLOR_SCALE, solarTimePoint)
+            );
+        }
         if (this.isMenuToggled("CONSTRUCTION_DATE")) {
             layers.push(
                 getConstructionDateLayer(fakeAndRealBuildings, this.COLOR_SCALE)
