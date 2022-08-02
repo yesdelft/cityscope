@@ -277,18 +277,15 @@ class Map extends Component {
      * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
      */
     _setViewStateToTableHeader() {
-        // const header = this.props.cityioData.GEOGRID.properties.header;
-
+        const tableName = this.props.cityioData.tableName
         this.setState({
             viewState: {
                 ...this.state.viewState,
-                longitude: settings.map.viewCalibration.longitude,
-                latitude: settings.map.viewCalibration.latitude,
-                // longitude: header.longitude,
-                // latitude: header.latitude,
-                zoom: settings.map.viewCalibration.zoom,
-                pitch: settings.map.viewCalibration.pitch,
-                bearing: settings.map.viewCalibration.rotate,//360 - 0,// header.rotation,
+                longitude: settings.map.viewCalibration[tableName].longitude,
+                latitude: settings.map.viewCalibration[tableName].latitude,
+                zoom: settings.map.viewCalibration[tableName].zoom,
+                pitch: settings.map.viewCalibration[tableName].pitch,
+                bearing: settings.map.viewCalibration[tableName].rotate,
                 orthographic: true,
             },
         });
@@ -527,18 +524,6 @@ class Map extends Component {
         const zoomLevel = this.state.viewState.zoom;
         let layers = [];
 
-        if (this.isMenuToggled("ABM")) {
-            layers.push(
-                getABMLayer(cityioFakeABMData, this.isMenuToggled("ABM"), this._remapValues(zoomLevel), this.props.sliders.time[1], this.props.ABMmode)
-            );
-        }
-
-        if (this.isMenuToggled("AGGREGATED_TRIPS")) {
-            layers.push(
-                getAggregatedTripsLayer(cityioFakeABMData, this.isMenuToggled("AGGREGATED_TRIPS"), this.props.ABMmode)
-            );
-        }
-
         let speed = 0.8;
         let periodInterval = 12; //100
         let timePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
@@ -549,6 +534,18 @@ class Map extends Component {
         if (this.isMenuToggled("CONSTRUCTION_DATE")) {
             layers.push(
                 getConstructionDateLayer(fakeAndRealBuildings, this.COLOR_SCALE)
+            );
+        }
+
+        if (this.isMenuToggled("ABM")) {
+            layers.push(
+                getABMLayer(cityioFakeABMData, this.isMenuToggled("ABM"), this._remapValues(zoomLevel), this.props.sliders.time[1], this.props.ABMmode)
+            );
+        }
+
+        if (this.isMenuToggled("AGGREGATED_TRIPS")) {
+            layers.push(
+                getAggregatedTripsLayer(cityioFakeABMData, this.isMenuToggled("AGGREGATED_TRIPS"), this.props.ABMmode)
             );
         }
 

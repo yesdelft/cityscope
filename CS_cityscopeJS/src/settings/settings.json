@@ -147,12 +147,22 @@
                                 "orthographic": true
                             },
         "viewCalibration": {
-                                "zoom": 16.155,
-                                "pitch": 0,
-                                "rotate": 180,
-                                "longitude":  4.5268,
-                                "latitude": 51.91725,
-                                "orthographic": true
+                                "rotterdam": {
+                                    "zoom": 13.895,
+                                    "pitch": 0,
+                                    "rotate": 0.9,
+                                    "longitude":  4.4901,
+                                    "latitude": 51.91456,
+                                    "orthographic": true
+                                },
+                                "campus" : {
+                                    "zoom": 16.155,
+                                    "pitch": 0,
+                                    "rotate": 180,
+                                    "longitude":  4.5268,
+                                    "latitude": 51.91725,
+                                    "orthographic": true
+                                }
                             },
         "main_map_display":{
                                 "margin": "10vh 15vw 10vh 15vw",
