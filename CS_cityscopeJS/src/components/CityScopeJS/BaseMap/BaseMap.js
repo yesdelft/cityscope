@@ -22,15 +22,14 @@ import {
     getTableBoundsLayer,
     getAccessLayer,
 } from "./Layers/RotterdamLayers";
-
+import {
+    getConstructionDateLayer, getEnergyUsageLayer,
+} from "./Layers/CampusLayers";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
-import { TripsLayer, TileLayer } from "@deck.gl/geo-layers";
-import { PolygonLayer, SolidPolygonLayer, BitmapLayer, GridCellLayer, ScatterplotLayer, TextLayer, IconLayer } from '@deck.gl/layers';
-import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import { scaleThreshold } from 'd3-scale';
 
@@ -42,14 +41,10 @@ import axios from "axios";
 import settings from "../../../settings/settings.json";
 import grid_200_data from "../../../data/objects/grid200_4326.geojson";
 import cityioFakeABMData from "../../../settings/fake_ABM.json"; //fake ABM data
-// import ship_image from "../../../data/shipAtlas.png"; 
 
 import ships from "../../../data/objects/ships.json";
 import complaints_all from "../../../data/objects/complaints_all.json";
-
-
 import fakeAndRealBuildings from "../../../data/objects/sensitive/fakeAndRealEnergyData.json";
-const COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain).range(settings.map.layers.campus.range);
 
 class Map extends Component {
     constructor(props) {
@@ -68,6 +63,7 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this.elapsedTime = 0;
+        this.COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain).range(settings.map.layers.campus.range);
     }
 
     componentWillUnmount() {
@@ -529,75 +525,31 @@ class Map extends Component {
      */
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
-        const { cityioData, selectedType, menu, ABMmode } = this.props;
-
         let layers = [];
 
         if (this.isMenuToggled("ABM")) {
             layers.push(
-                getABMLayer(cityioFakeABMData, this.isMenuToggled("ABM"), this._remapValues(zoomLevel), this.props.sliders.time[1], ABMmode)
+                getABMLayer(cityioFakeABMData, this.isMenuToggled("ABM"), this._remapValues(zoomLevel), this.props.sliders.time[1], this.props.ABMmode)
             );
         }
 
         if (this.isMenuToggled("AGGREGATED_TRIPS")) {
             layers.push(
-                getAggregatedTripsLayer(cityioFakeABMData, this.isMenuToggled("AGGREGATED_TRIPS"), ABMmode)
+                getAggregatedTripsLayer(cityioFakeABMData, this.isMenuToggled("AGGREGATED_TRIPS"), this.props.ABMmode)
             );
         }
 
+        let speed = 0.8;
+        let periodInterval = 12; //100
+        let timePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
         layers.push(
-            new GeoJsonLayer({
-                id: 'geojson-layer-smart',
-                data: fakeAndRealBuildings,
-                pickable: false,
-                stroked: false,
-                filled: true,
-                opacity: 0.8,
-                extruded: false,
-                // wireframe:true,.
-                // pointType: 'circle',
-                // lineWidthScale: 1,
-                // lineWidthMinPixels: 2,
-                // getFillColor: [160, 160, 180, 200],
-                // getLineColor: d => colorToRGBArray(d.properties.color),
-                // getPointRadius: 10,
-                getLineWidth: f => { console.log("im here", f.properties); return 1; },
-                getFillColor: f => {
-                    let speed = 0.8;
-                    let periodInterval = 12; //100
-                    let currentTimePoint = Math.floor(this.elapsedTime / (1000 / speed)) % periodInterval;
-                    // currentTimePoint += 1;
-
-                    // console.log("id", f.id);
-                    // console.log("reading", currentTimePoint);
-                    return COLOR_SCALE(f.usage[currentTimePoint]["energy"]);
-                },
-                positionFormat: "XYZ",
-                transitions: {
-                    getFillColor: 500
-                },
-                updateTriggers: {
-                    getFillColor: this.elapsedTime
-                }
-            }));
+            getEnergyUsageLayer(fakeAndRealBuildings, this.COLOR_SCALE, timePoint)
+        );
 
         if (this.isMenuToggled("CONSTRUCTION_DATE")) {
             layers.push(
-                new GeoJsonLayer({
-                    id: 'geojson-construction-date-layer',
-                    data: fakeAndRealBuildings,
-                    opacity: 0.8,
-                    getFillColor: f => {
-                        return COLOR_SCALE(f.year);
-                    },
-                    positionFormat: "XYZ",
-                    transitions: {
-                        getFillColor: 500
-                    },
-                    updateTriggers: {
-                        getFillColor: fakeAndRealBuildings
-                    }
-                }));
+                getConstructionDateLayer(fakeAndRealBuildings, this.COLOR_SCALE)
+            );
         }
 
         if (this.isMenuToggled("RENT")) {
