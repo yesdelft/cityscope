@@ -31,7 +31,7 @@ import { StaticMap } from "react-map-gl";
 
 import DeckGL from "@deck.gl/react";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
-import { scaleThreshold } from 'd3-scale';
+import { scaleThreshold, scaleLinear } from 'd3-scale';
 
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 
@@ -64,7 +64,9 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this.elapsedTime = 0;
-        this.COLOR_SCALE = scaleThreshold().domain(settings.map.layers.campus.domain).range(settings.map.layers.campus.range);
+        this.COLOR_SCALE_RED = scaleThreshold().domain(settings.map.layers.campus.redColorScale.domain).range(settings.map.layers.campus.redColorScale.range);
+        this.COLOR_SCALE_GREEN = scaleLinear().domain(settings.map.layers.campus.greenColorScale.domain).range(settings.map.layers.campus.greenColorScale.range);
+
     }
 
     componentWillUnmount() {
@@ -529,19 +531,19 @@ class Map extends Component {
         if (this.isMenuToggled("ENERGY")) {
             let energyTimePoint = this.state.remoteMenu.sliders.energy;
             layers.push(
-                getBuildingMetricLayer("energy", fakeAndRealBuildings, this.COLOR_SCALE, energyTimePoint)
+                getBuildingMetricLayer("energy", fakeAndRealBuildings, this.COLOR_SCALE_RED, energyTimePoint)
             );
         }
         
         if (this.isMenuToggled("SOLAR")) {
             let solarTimePoint = this.state.remoteMenu.sliders.solar;
             layers.push(
-                getBuildingMetricLayer("solar", solarUsageBuildings, this.COLOR_SCALE, solarTimePoint)
+                getBuildingMetricLayer("solar", solarUsageBuildings, this.COLOR_SCALE_GREEN, solarTimePoint)
             );
         }
         if (this.isMenuToggled("CONSTRUCTION_DATE")) {
             layers.push(
-                getConstructionDateLayer(fakeAndRealBuildings, this.COLOR_SCALE)
+                getConstructionDateLayer(fakeAndRealBuildings, this.COLOR_SCALE_RED)
             );
         }
 

@@ -6,7 +6,7 @@ export function getConstructionDateLayer(data, colorScale) {
         data: data,
         opacity: 0.8,
         getFillColor: f => {
-            return colorScale(f.year);
+            return colorScale((1 - f.year));
         },
         positionFormat: "XYZ",
         transitions: {
