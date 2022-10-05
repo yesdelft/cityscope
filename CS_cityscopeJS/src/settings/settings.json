@@ -162,11 +162,11 @@
                                     "orthographic": true
                                 },
                                 "campus" : {
-                                    "zoom": 16.173,
+                                    "zoom": 16.1735,
                                     "pitch": 0,
-                                    "rotate": 178,
-                                    "longitude":  4.52692,
-                                    "latitude": 51.91734,
+                                    "rotate": 180,
+                                    "longitude":  4.52595,
+                                    "latitude": 51.91755,
                                     "orthographic": true
                                 }
                             },
