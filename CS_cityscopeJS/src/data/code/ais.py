@@ -15,8 +15,8 @@ import re
 import sys
 
 try:
-    BaseException.with_traceback
-
+    # BaseException.with_traceback
+    print("Initializing Traceback")
     def reraise_with_traceback(exc_type, exc_value, exc_traceback):
         raise exc_type(exc_value).with_traceback(exc_traceback)
 
